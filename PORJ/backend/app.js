@@ -2,6 +2,7 @@ import express from 'express'
 import swaggerJSDoc from 'swagger-jsdoc'
 import swaggerUi from 'swagger-ui-express'
 import session from 'express-session'
+import cors from 'cors'
 //import expressLayouts from 'express-ejs-layouts'
 
 import { router as ItemRouter } from './routes/item_routes.js'
@@ -11,6 +12,12 @@ import { router as SearchRouter } from './routes/search_routes.js'
 
 
 const app = express()
+
+const corsOptions = {
+    origin: ["http://localhost:5174/"]
+}
+
+app.use(cors(corsOptions))
 
 //--------------------------------------------------------------------------------------------
 //Per il front end

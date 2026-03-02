@@ -1,0 +1,17 @@
+{
+    "name": "prova-react-root",
+    "version": "1.0.0",
+    "private": true,
+    "workspaces": [
+        "backend",
+        "frontend"
+    ],
+    "scripts": {
+        "dev:backend": "npm run start --workspace=backend",
+        "dev:frontend": "npm run dev --workspace=frontend",
+        "install:all": "npm install"
+    },
+    "dependencies": {
+        "cors": "^2.8.6"
+    }
+}
