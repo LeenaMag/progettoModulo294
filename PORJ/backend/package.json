@@ -1,0 +1,26 @@
+{
+  "name": "295",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "LeenaMaggisano",
+  "type": "module",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "dotenv": "^17.2.3",
+    "ejs": "^4.0.1",
+    "express": "^5.2.1",
+    "express-ejs-layouts": "^2.5.1",
+    "express-session": "^1.19.0",
+    "mysql2": "^3.16.1",
+    "nodemon": "^3.1.11",
+    "path": "^0.12.7",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
+  }
+}
