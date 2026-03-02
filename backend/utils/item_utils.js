@@ -2,7 +2,7 @@ import path from 'path'
 import { con } from '../connection.js'
 
 export async function getAllItems() {
-  const [items] = await con.query(`SELECT* FROM oggetto`)
+  const [items] = await con.query(`SELECT* FROM oggetto ORDER BY dataCreazione DESC`)
   return items
 }
 

@@ -157,11 +157,11 @@ router.post('/items/chats/:itemId', isAuthenticated, async (req, res) => {
     const userId1 = req.session.user.id
     const item = await getItemById(itemId)
     const chatExist = await checkChatExist(item.fk_utente, userId1)
-    
+
     if (chatExist.length > 0) {
-        res.statusCode = 401
-        res.setHeader('Content-Type', 'application/json')
-        return res.end(JSON.stringify({ error: "Chat già esistente" }))
+      res.statusCode = 401
+      res.setHeader('Content-Type', 'application/json')
+      return res.end(JSON.stringify({ error: "Chat già esistente" }))
     }
     const chat = await createChat(userId1, item.fk_utente)
 
@@ -209,7 +209,15 @@ router.post('/items', isAuthenticated, async (req, res) => {
 
     const userId = req.session.user.id
     const now = new Date()
-    const formattedDate = now.getDate() + '-' + (now.getMonth() + 1) + '-' + now.getFullYear()
+    const formattedDate = now.getFullYear() +
+      '-' +
+      (now.getMonth() + 1) +
+      '-' +
+      now.getDate() +
+      ' ' +
+      now.getHours() +
+      ':' +
+      now.getMinutes()
 
     const createdItem = await createItem(picture, name, price, description, formattedDate, userId, fk_tag)
 
@@ -287,7 +295,7 @@ router.post('/items/favorites', isAuthenticated, async (req, res) => {
       return res.end(JSON.stringify({ error: 'Oggetto inesistente' }))
     }
     const checkFavorite = await isItemInFavorites(userId, itemId)
-    if ( checkFavorite.lenght > 0) {
+    if (checkFavorite.lenght > 0) {
       res.statusCode = 204
       res.setHeader('Content-Type', 'application/json')
       return res.end(JSON.stringify({ error: 'Oggetto già presente fra i preferiti' }))
@@ -320,13 +328,13 @@ router.delete('/items/favorites/:itemId', isAuthenticated, async (req, res) => {
     const userId = req.session.user.id
     const itemId = req.params.itemId
     const item = await getItemById(itemId)
-    if ( item === undefined) {
+    if (item === undefined) {
       res.statusCode = 401
       res.setHeader('Content-Type', 'application/json')
       return res.end(JSON.stringify({ error: 'Oggetto inesistente' }))
     }
     const checkFavorite = await isItemInFavorites(userId, itemId)
-    if ( checkFavorite.lenght > 0) {
+    if (checkFavorite.lenght > 0) {
       res.statusCode = 400
       res.setHeader('Content-Type', 'application/json')
       return res.end(JSON.stringify({ error: 'Oggetto non presente fra i preferiti' }))
@@ -359,7 +367,7 @@ router.post('/items/cart', isAuthenticated, async (req, res) => {
   try {
     const userId = req.session.user.id
     const { itemId } = req.body
-    const item = await getItemById(itemId) 
+    const item = await getItemById(itemId)
 
     if (item.lenght > 0) {
       res.statusCode = 401
@@ -393,8 +401,8 @@ router.delete('/items/cart/:itemId', isAuthenticated, async (req, res) => {
   try {
     const userId = req.session.user.id
     const itemId = req.params.itemId
-    const item = await  getItemById(itemId)
-    if ( item === undefined) {
+    const item = await getItemById(itemId)
+    if (item === undefined) {
       res.statusCode = 401
       res.setHeader('Content-Type', 'application/json')
       return res.end(JSON.stringify({ error: 'Oggetto inesistente' }))
@@ -513,9 +521,9 @@ router.get('/cart', isAuthenticated, async (req, res) => {
 router.get('/favorites', isAuthenticated, async (req, res) => {
   try {
     const userId = req.session.user.id
-  
+
     const favoriteItems = await getFavoriteItemsByUserId(userId)
-    
+
     return res.status(200).json(favoriteItems)
   } catch (err) {
     console.error(err)
