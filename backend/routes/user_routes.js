@@ -88,7 +88,16 @@ router.post('/signup', async (req, res) => {
     const { username, password, firstName, lastName } = req.body
 
     const now = new Date()
-    const formattedDate = now.getDate() + '-' + (now.getMonth() + 1) + '-' + now.getFullYear()
+    const formattedDate = now.getFullYear() +
+      '-' +
+      (now.getMonth() + 1) +
+      '-' +
+      now.getDate() +
+      ' ' +
+      now.getHours() +
+      ':' +
+      now.getMinutes()
+
 
     const credentials = await validateUserCredentials(username, password, firstName, lastName, res)
     if (credentials.error != undefined) {
@@ -139,7 +148,7 @@ router.post('/signup', async (req, res) => {
  *                 error:
  *                   type: string
  */
-router.patch('/modify',isAuthenticated, async (req, res) => {
+router.patch('/modify', isAuthenticated, async (req, res) => {
   try {
     const { username, password, firstName, lastName } = req.body
     console.log(username)
@@ -476,11 +485,11 @@ router.post('/messages', isAuthenticated, async (req, res) => {
 
     const now = new Date()
     const formattedDate =
-      now.getDate() +
+      now.getFullYear() + +
       '-' +
       (now.getMonth() + 1) +
       '-' +
-      now.getFullYear() +
+      now.getDate() +
       ' ' +
       now.getHours() +
       ':' +
@@ -538,15 +547,15 @@ router.post('/chats', isAuthenticated, async (req, res) => {
   }
 })
 
-router.post('/addValutation/:nota/:userId', isAuthenticated, async(req, res)=>{
-  try{
+router.post('/addValutation/:nota/:userId', isAuthenticated, async (req, res) => {
+  try {
     const nota = req.params.nota
     const userId = req.params.userId
     const valutazione = addValutation(nota, userId)
     res.setHeader('Content-Type', 'application/json')
     res.status(200)
     res.end(JSON.stringify(valutazione))
-  }catch(error){
+  } catch (error) {
     console.error(error)
   }
 })
