@@ -31,9 +31,9 @@ app.listen("3000", /*function () {} oppure */ () => {
     console.log("App avviata sulla porta 3000")
 })
 
-app.get(function(request, response){
-    response.send("La pagina inserita non esiste")
-})
+app.use((req, res) => {
+    res.status(404).send("La pagina inserita non esiste");
+});
 
 
 
