@@ -27,7 +27,7 @@ export default function HomePage() {
 }
 
 export async function loader({ request, param }) {
-    const response = await fetch('http://127.0.0.1:3000/item/items');
+    const response = await fetch('http://127.0.0.1:3000/Items/items');
 
     if (!response.ok) {
         throw new Error('Could not fetch items');

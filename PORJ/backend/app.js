@@ -16,7 +16,7 @@ import { checkExpiredAuctions } from './utils/item_utils.js'
 const app = express()
 
 const corsOptions = {
-    origin: ["http://localhost:5174/"]
+    origin: ["http://localhost:5174", "http://172.0.0.1:5174"]
 }
 
 app.use(cors(corsOptions))
