@@ -1,0 +1,13 @@
+.itemContainer {
+    display: flex;
+}
+
+#containerRaws {
+    overflow-y: auto;
+    max-height: 720px;
+    padding: 0% 2% 0% 2%;
+}
+
+#containerRaws::-webkit-scrollbar {
+    display: none;
+}
