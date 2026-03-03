@@ -45,7 +45,7 @@ const router = express.Router()
  *       500:
  *         description: Errore interno del server
  */
-router.get('/tags', isAuthenticated, async (req, res) => {
+router.get('/tags', async (req, res) => {
   try {
     const tags = await getAllTags()
     res.setHeader('Content-Type', 'application/json')
@@ -87,7 +87,7 @@ router.get('/tags', isAuthenticated, async (req, res) => {
  *       500:
  *         description: Errore interno del server
  */
-router.get('/tag/:tagId', isAuthenticated, async (req, res) => {
+router.get('/tag/:tagId',  async (req, res) => {
   try {
     const tagId = req.params.tagId
     const items = await findItemsByTagId(tagId)
@@ -130,7 +130,7 @@ router.get('/tag/:tagId', isAuthenticated, async (req, res) => {
  *       500:
  *         description: Errore interno del server
  */
-router.get('/name/:name', isAuthenticated, async (req, res) => {
+router.get('/name/:name',  async (req, res) => {
   try {
     const name = req.params.name
     const namePattern = '%' + name + '%'

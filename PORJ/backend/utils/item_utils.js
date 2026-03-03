@@ -92,18 +92,87 @@ export async function updateItemById(itemId, price, photo, description, name, ta
 
 export async function newAuction(itemId, dataI, minPrice, time, userID){
   const [result] = await con.query(
-    `INSERT INTO asta (fk_oggetto, dataI, durata, minPrezzo)
-     SELECT id, ?, ?, ?
-     FROM oggetto
-     WHERE fk_utente = ? AND id = ?`[itemId, dataI, minPrice, time, userID, itemId]
+    `INSERT INTO asta (fk_oggetto, dataI, dataF, minPrezzo)
+    VALUES  ?, ?, ?, ?`[itemId, dataI, time, minPrice]
   )
 
   return result
 }
 
-//controllo da aggiungere per la fine dell'asta, per il prezzo maggiorato
+
 export async function newOffer(userId, auctionId, price){
   const [result] = await con.query(
-  `INSERT INTO offerta (fk_utente, fk_asta, valore) VALUES (?,?,?)`[userId, auctionId, price])
+  `INSERT INTO offerta (fk_utente, fk_asta, valore) VALUES (?, ?, ?)`[userId, auctionId, price])
+  return result
+}
+
+export async function getOffers(){
+  const [result] = await con.query(
+  `SELECT* FROM offerta`)
+  return result
+}
+
+export async function infoAuction(auctionId){
+  const [result] = await con.query(`SELECT* FROM asta WHERE id = ?`[auctionId])
+  return result
+}
+
+export async function infoOffer(offerId){
+  const [result] = await con.query(`SELECT* FROM offerta WHERE id = ?`[offerId])
+  return result
+}
+
+export async function addTimeAuction(auctionId, time){
+  const [result] = await con.query(
+    `UPDATE asta SET dataF = ? WHERE id = ?`[time, auctionId]
+  )
+  return result
+}
+
+export async function findOffer(userID, auctionId, price){
+  const [result] = await con.query(
+    `SELECT* FROM offerta WHERE fk_utente =? AND fk_asta = ? AND valore = ?`[userID, auctionId, price]
+  )
+  return result
+}
+
+export async function changeWinningOffer(idOfferta, auctionId){
+  const [result] = await con.query(
+    `UPDATE asta SET fk_offerta = ? WHERE id = ?`[idOfferta, auctionId]
+  )
+  return result
+}
+
+export async function setNewTime(auctionId, newTime){
+  const [result] = await con.query(
+    `UPDATE asta SET dataF= ? WHERE id = ?`[newTime, auctionId]
+  )
+  return result
+}
+
+export async function setStatus(auctionId){
+  const [result] = await con.query(
+    `UPDATE asta SET aperta = false WHERE id = ?`[auctionId]
+  )
+  return result
+}
+
+
+export async function checkExpiredAuctions() {
+  const now = new Date();
+  const offers = await getOffers();
+
+  for (const row of offers) {
+    const input = row.dataF;
+    const [datePart, timePart] = input.split(" ");
+    const [year, month, day] = datePart.split(".").map(Number);
+    const [hour, minute] = timePart.split(":").map(Number);
+
+    const inputDate = new Date(year, month - 1, day, hour, minute);
+
+    if (inputDate <= now) {
+      await setStatus(row.id);
+    }
+  }
 }
 

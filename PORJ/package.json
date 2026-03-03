@@ -12,6 +12,7 @@
         "install:all": "npm install"
     },
     "dependencies": {
-        "cors": "^2.8.6"
+        "cors": "^2.8.6",
+        "multer": "^2.1.0"
     }
 }

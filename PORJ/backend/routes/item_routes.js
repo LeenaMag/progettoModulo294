@@ -38,7 +38,15 @@ import {
   isItemInFavorites,
   isItemInCart,
   addItemToCart,
-  removeItemFromCart
+  removeItemFromCart,
+  newAuction,
+  newOffer,
+  infoAuction,
+  infoOffer,
+  addTimeAuction,
+  changeWinningOffer,
+  findOffer,
+  setNewTime
 } from '../utils/item_utils.js'
 import { isAuthenticated, createChat, checkChatExist } from '../utils/user_utils.js'
 
@@ -73,7 +81,7 @@ const router = express.Router()
  *       500:
  *         description: Errore interno del server
  */
-router.get('/items', isAuthenticated, async (req, res) => {
+router.get('/items', async (req, res) => {
   try {
     res.statusCode = 200
     res.send(await getAllItems())
@@ -110,7 +118,7 @@ router.get('/items', isAuthenticated, async (req, res) => {
  *       500:
  *         description: Errore interno del server
  */
-router.get('/items/:itemId', isAuthenticated, async (req, res) => {
+router.get('/items/:itemId', async (req, res) => {
   try {
     const itemId = req.params.itemId
     res.statusCode = 200
@@ -286,6 +294,7 @@ router.delete('/items/:itemId', isAuthenticated, async (req, res) => {
  */
 router.post('/items/favorites', isAuthenticated, async (req, res) => {
   try {
+
     const userId = req.session.user.id
     const { itemId } = req.body
     const item = await getItemById(itemId)
@@ -579,6 +588,160 @@ router.patch('/items/update', isAuthenticated, async (req, res) => {
     res.statusCode = 200
     res.setHeader('Content-Type', 'application/json')
     res.end()
+  } catch (err) {
+    console.error(err)
+    res.statusCode = 500
+    res.setHeader('Content-Type', 'application/json')
+    res.end(JSON.stringify({ error: err }))
+  }
+})
+
+/**
+ * @swagger
+ * /items/auction/createAuction:
+ *   post:
+ *     tags: ["item"]
+ *     summary: Apre una nuova asta
+ *     description: Crea una nuova asta se l'oggetto scelto appartiene all'utente loggato
+ *     responses:
+ *       200:
+ *         description: Info Modificate
+ *       500:
+ *   
+ * 
+ */
+router.post('/items/auction/createAuction', isAuthenticated, async(req, res) => {
+  try {
+    const userId = req.session.user.id
+    const { itemId, dataI, minPrice, dataF} = req.body
+    
+
+    const item = await getItemById(itemId)
+
+    if (item.lenght > 0) {
+      res.statusCode = 401
+      res.setHeader('Content-Type', 'application/json')
+      return res.end(JSON.stringify({ error: 'Oggetto inesistente' }))
+    }
+
+    if(item.fk_utente === userId){
+      const newAct = await newAuction(itemId, dataI, minPrice, dataF)
+    }
+
+    res.statusCode = 200
+    res.setHeader('Content-Type', 'application/json')
+    res.end()
+    
+  } catch (err) {
+    console.error(err)
+    res.statusCode = 500
+    res.setHeader('Content-Type', 'application/json')
+    res.end(JSON.stringify({ error: err }))
+  }
+})
+
+/**
+ * @swagger
+ * /items/auction/:id:
+ *   get:
+ *     tags: ["item"]
+ *     summary: Vedere un asta
+ *     description: RIchiede le informazioni di un asta specifica
+ *     responses:
+ *       200:
+ *         description: dati presi con successo
+ *       500:
+ *   
+ * 
+ */
+router.get(`/items/auction/:auctionId`,async(req, res)=>{
+  try {
+    const auctionId = req.params.auctionId
+    res.statusCode = 200
+    res.setHeader('Content-Type', 'application/json')
+    res.send(await infoAuction(auctionId))
+  } catch (err) {
+    console.error(err)
+    res.statusCode = 500
+    res.setHeader('Content-Type', 'application/json')
+    res.end(JSON.stringify({ error: err }))
+  }
+})
+
+/**
+ * @swagger
+ * /items/auction/createAuction:
+ *   post:
+ *     tags: ["item"]
+ *     summary: Apre una nuova asta
+ *     description: Crea una nuova asta se l'oggetto scelto appartiene all'utente loggato
+ *     responses:
+ *       200:
+ *         description: Info Modificate
+ *       500:
+ *   
+ * 
+ */
+router.post('/items/auction/newOffer', isAuthenticated, async(req, res) => {
+  try {
+    const userId = req.session.user.id
+    const { auctionId, price } = req.body
+    
+
+    const auction = await infoAuction(auctionId)
+
+
+    if (auction.lenght > 0 || auction.dataF) {
+      res.statusCode = 401
+      res.setHeader('Content-Type', 'application/json')
+      return res.end(JSON.stringify({ error: 'Asta ineistente' }))
+    }
+
+    if(!auction.aperta){
+      res.statusCode = 400
+      res.setHeader('Content-Type', 'application/json')
+      return res.end(JSON.stringify({ error: 'Asta chiusa' }))      
+    }
+
+   
+
+    const offer = (auction.fk_offerta === null)? null : await infoOffer(auction.fk_offerta)
+
+    if(offer === null && auction.minPrezzo >= price ){
+      const newOff = await newOffer(userId, auctionId, price)
+    } else if (offer.valore < price){
+      const newOff = await newOffer(userId, auctionId, price)
+    }else{
+      res.statusCode = 401
+      res.setHeader('Content-Type', 'application/json')
+      return res.end(JSON.stringify({ error: 'Valore dell\' offerta insufficente' }))
+    }
+    const winningOffer = await findOffer(userId, auctionId, price)
+    const newWinner = await changeWinningOffer (winningOffer.id , auctionId)
+
+    
+    //data finale dell'asta
+    const input = auction.dataF
+    const [datePart, timePart] = input.split(" ")
+    let [year, month, day] = datePart.split(".")
+    let [hour, minute] = timePart.split(":")
+    const inputDate = new Date(year, month - 1, day, hour-1, minute);
+    
+    //now date
+    const now = new Date()
+
+    if (inputDate <= now){
+      inputDate.setHours(inputDate.getHours() + 1)
+      const result = `${inputDate.getFullYear()}.${inputDate.getMonth() + 1}.${inputDate.getDay()} ${inputDate.getHours()}:${inputDate.getMinutes()}`
+      const newTime = await setNewTime(auction.id, result)
+    }
+
+
+
+    res.statusCode = 200
+    res.setHeader('Content-Type', 'application/json')
+    res.end()
+    
   } catch (err) {
     console.error(err)
     res.statusCode = 500

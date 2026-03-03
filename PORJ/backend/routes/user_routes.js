@@ -330,7 +330,7 @@ router.get('/logout', isAuthenticated, async (req, res) => {
  *       500:
  *         description: Errore interno del server
  */
-router.get('/user/:username', isAuthenticated, async (req, res) => {
+router.get('/user/:username',  async (req, res) => {
   try {
     const username = req.params.username
     const user = await getUserByUsername(username)

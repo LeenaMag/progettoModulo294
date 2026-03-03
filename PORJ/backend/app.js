@@ -9,6 +9,8 @@ import { router as ItemRouter } from './routes/item_routes.js'
 import { router as UserRouter } from './routes/user_routes.js'
 import { router as SearchRouter } from './routes/search_routes.js'
 
+import { checkExpiredAuctions } from './utils/item_utils.js'
+
 
 
 const app = express()
@@ -60,6 +62,14 @@ const option ={
     },
     apis: ["./routes/*.js"]
 }
+
+setInterval(async () => {
+  try {
+    await checkExpiredAuctions();
+  } catch (error) {
+    console.error("Error checking expired auctions:", error);
+  }
+}, 2 * 60 * 1000);
 
 app.use(session({
     secret: process.env.SECRET,
