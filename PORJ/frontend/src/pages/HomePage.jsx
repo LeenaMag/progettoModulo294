@@ -26,8 +26,14 @@ export default function HomePage() {
     );
 }
 
-export async function loader({ request, param }) {
-    const response = await fetch('http://127.0.0.1:3000/item/items');
+export async function loader({ params }) {
+    let response = { ok: false}
+    if(params.ricerca){
+        response = await fetch(`http://127.0.0.1:3000/search/${params.ricerca}/1`)
+
+    }else {
+        response = await fetch('http://127.0.0.1:3000/Items/items/1');
+    }
 
     if (!response.ok) {
         throw new Error('Could not fetch items');

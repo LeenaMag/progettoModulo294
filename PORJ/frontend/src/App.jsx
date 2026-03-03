@@ -13,7 +13,7 @@ const router = createBrowserRouter([{
   id: 'root',
   children: [
      { index: true, element: <HomePage />, loader: itemsLoader },
-    // { path: "item/:id", element: <ItemPage />, loader: itemLoader },
+    { path: "/:ricerca", element: <HomePage />, loader: itemsLoader },
     // { path: "addItem", element: <AddItemPage /> }
   ]
 }])

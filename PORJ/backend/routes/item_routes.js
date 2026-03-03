@@ -81,10 +81,12 @@ const router = express.Router()
  *       500:
  *         description: Errore interno del server
  */
-router.get('/items', async (req, res) => {
+router.get('/items/:nr', async (req, res) => {
   try {
+    const nr = Number(req.params.nr)
     res.statusCode = 200
-    res.send(await getAllItems())
+    const response = await getAllItems()
+    res.send(response.slice((nr-1)*30, Math.min(nr*30 -1, (response.length-1))))
   } catch (err) {
     res.statusCode = 401
     res.setHeader('Content-Type', 'application/json')

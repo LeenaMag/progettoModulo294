@@ -87,12 +87,13 @@ router.get('/tags', async (req, res) => {
  *       500:
  *         description: Errore interno del server
  */
-router.get('/tag/:tagId',  async (req, res) => {
+router.get('/tag/:tagId/:nr',  async (req, res) => {
   try {
+    const nr = Number(req.params.nr)
     const tagId = req.params.tagId
     const items = await findItemsByTagId(tagId)
     res.setHeader('Content-Type', 'application/json')
-    res.end(JSON.stringify(items))
+    res.end(JSON.stringify(items.slice((nr-1)*30, Math.min(nr*30 -1, (items.length-1)))))
   } catch (error) {
     console.error(error)
   }
@@ -130,13 +131,14 @@ router.get('/tag/:tagId',  async (req, res) => {
  *       500:
  *         description: Errore interno del server
  */
-router.get('/name/:name',  async (req, res) => {
+router.get('/name/:name/:nr',  async (req, res) => {
   try {
+    const nr = Number(req.params.nr)
     const name = req.params.name
     const namePattern = '%' + name + '%'
     const items = await findItemsByName(namePattern)
     res.setHeader('Content-Type', 'application/json')
-    res.end(JSON.stringify(items))
+    res.end(JSON.stringify(items.slice((nr-1)*30, Math.min(nr*30 -1, (items.length-1)))))
   } catch (error) {
     console.error(error)
   }
