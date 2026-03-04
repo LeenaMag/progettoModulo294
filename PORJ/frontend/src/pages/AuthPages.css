@@ -21,13 +21,13 @@
     color: blue;
 }
 
-.formInput {
+.formInput, profile-input {
     display: grid;
     align-items: center;
     margin: 20px;
 }
 
-.formInput input {
+.formInput input, .profile-input {
     font-size: 20px;
     border-radius: 10px;
     padding: 5px;

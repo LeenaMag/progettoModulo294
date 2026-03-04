@@ -1,15 +1,15 @@
 import React, { useContext }  from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { AuthContext } from '../context/AuthContext';
+import { AuthContext} from '../context/AuthContext';
 import './Header.css';
 
 // Header component with a simple navigation menu and no logo
 export default function Header() {
-    const {user} = useContext(AuthContext);
+    const {user, logout} = useContext(AuthContext);
     const navigate = useNavigate();
 
     const handleLogout = async () => {
-        // await logout();
+        await logout();
         navigate('/');
     };
 

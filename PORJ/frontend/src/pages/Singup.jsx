@@ -1,32 +1,31 @@
 import React, { useState, useContext } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import {  Link } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import './AuthPages.css';
 
 export default function Singup() {
-    const { login } = useContext(AuthContext);
     const navigate = useNavigate();
-    const [error, setError] = useState('');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setError('');
-
-        const username = e.target.username.value;
-        const password = e.target.password.value;
-
+        
         try {
-            await login(username, password);
+            await fetch('http://127.0.0.1:3000/User/signup', {
+                method: 'POST',
+                credentials: 'include',
+                body: submitData
+            });
             navigate('/');
         } catch (err) {
-            setError(err.message);
+            console.error("Errore:", err);
+            alert("Errore durante l'inserimento!");
         }
     };
 
     return (
         <div className="authContainer">
             <h2>Accedi al tuo account</h2>
-            {error && <div className="errorMessage">{error}</div>}
+            
 
             <form onSubmit={handleSubmit} className="authForm">
                 <input type="file" name="prod_img" accept="image/*" className="profile-input" required />
@@ -35,11 +34,11 @@ export default function Singup() {
                 </div>
 
                 <div className="formInput">
-                    <input type="text" id="nome" name="nome" placeholder='nome' required />
+                    <input type="text" id="nome" name="firstName" placeholder='nome' required />
                 </div>
 
                 <div className="formInput">
-                    <input type="text" id="cognome" name="cognome" placeholder='cognome' required />
+                    <input type="text" id="cognome" name="lastName" placeholder='cognome' required />
                 </div>
 
                 <div className="formInput">
