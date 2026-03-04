@@ -35,10 +35,13 @@ export default function AddItemPage() {
             
             <div className='center'>
                 <h2>Aggiungi Prodotto</h2>
-                <PrewiewOwner user ={{
-                    foto: "#",
-                    nome: "Mario Rossi"
-                }}/>
+                <div className='prewiewOwner'>
+                    <PrewiewOwner user ={{
+                        foto: "#",
+                        nome: "Mario Rossi"
+                    }}/>
+                </div>
+                
                 <form onSubmit={handleSubmit} className="add-item-form">
                 
                     <div className='flexed'>

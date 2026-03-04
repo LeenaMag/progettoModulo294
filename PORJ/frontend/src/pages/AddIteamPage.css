@@ -7,8 +7,8 @@
      
 }
 .center{ 
-    width: 900px;
-    height: 400px;
+    width: 800px;
+    height: 525px;
     margin: 0 auto;   
     margin-top: 20px;
     background-color: #858383;
@@ -28,23 +28,28 @@ h2{
 }
 
 .colR{
-    width: 40%;
+    padding-top: 20px;
+    width: 70%;
 }
 
 .colL{
-    width: 40%;
-    height: 75%;
-
+    padding-top: 20px;
+    width: 80%;
+    height: 80%;
+    display: flex;
+    justify-content: center;
 }
 
 .file-input{
-    width: 100%;
+    width: 98%;
     border: black 1px solid;
-    height: 250px;
+    height: 280px;
     background-color: #242424;
     color: rgba(255, 255, 255, 0.37);
+    padding: 5px;
     border-radius: 10px;
-
+    display: block;
+    margin: 0 auto;
 }
 
 .file-input::file-selector-button {
@@ -61,21 +66,48 @@ h2{
     border-radius: 5px;
     background-color: #242424;
     color: white;
+    height: 25px;
+    width: 80%;
+    padding: 5px;
+    margin-top: 25px;
+}
+
+.prezzo{
+    margin-top: 10px;
 }
 
 .tag{
     border-radius: 5px;
     background-color: #242424;
     color: white;
+    height: 25px;
+    padding: 5px;
+    margin-top: 10px;
+    
 }
 
 .descrizione{
     border-radius: 5px;
     background-color: #242424;
     color: white;
-    
+    width: 80%;
+    height: 100px; 
+    padding: 5px;  
+    margin-top: 10px;
 }
 
 .submit-btn{
     background-color: #00c3ff94;
+    color: white;
+    border: none;
+    margin-top: 10px;
+    border-radius: 10px;
+    width: 20%;
+    height: 40px;
+}
+
+.prewiewOwner{
+    display: flex;
+    justify-content: flex-end;
+    width: 60%;
 }
