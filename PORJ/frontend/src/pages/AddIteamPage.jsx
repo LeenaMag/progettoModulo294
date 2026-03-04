@@ -19,7 +19,7 @@ export default function AddItemPage() {
         try {
             await fetch('http://127.0.0.1:3000/items/items', {
                 method: 'POST',
-                //credentials: 'include',
+                credentials: 'include',
                 body: submitData
             });
             navigate('/');
@@ -69,9 +69,9 @@ export default function AddItemPage() {
 }
 
 export async function loader() {
-    //const { username } = useContext(AuthContext);
+   // const { username } = useContext(AuthContext);
     const response = await fetch('http://127.0.0.1:3000/search/tags');
-    //const utente = await fetch ('http://127.0.0.1:3005/user/');
+    //const res2 = await fetch (`http://127.0.0.1:3005/user/${username}`);
     if (!response.ok) {
         throw new Error('Impossibile caricare le tipologie');
     }

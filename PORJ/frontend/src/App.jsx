@@ -2,13 +2,13 @@ import './App.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { loader as itemsLoader } from './pages/HomePage.jsx'
 import Base from './pages/Base.jsx'
-import { loader as tagsloader } from './pages/AddItemPage.jsx'
+import { loader as tagsloader } from './pages/AddIteamPage.jsx'
 import HomePage from './pages/HomePage.jsx'
 import LoginPage from './pages/LoginPage.jsx'
 import { AuthProvider } from './context/AuthContext.jsx'
 import Singup from './pages/singup.jsx'
 // import ItemPage, { loader as itemLoader } from './pages/ItemPage.jsx'
-import AddItemPage from './pages/AddItemPage.jsx'
+import AddItemPage from './pages/AddIteamPage.jsx'
 
 
 const router = createBrowserRouter([{
