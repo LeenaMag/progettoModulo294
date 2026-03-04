@@ -1,0 +1,48 @@
+.authContainer {
+    place-self: center;
+    background-color: #7d7d7d;
+    margin: 5px;
+    margin-top: 5%;
+    border-radius: 20px;
+    width: 33%;
+    min-height: 350px;
+    place-items: center;
+}
+
+.errorMessage {
+    background-color: #ff000084;
+    padding: 10px;
+    width: 52%;
+    border: 2px solid #ff0000;
+    text-align: center;
+}
+
+#redirectButton {
+    color: blue;
+}
+
+.formInput {
+    display: grid;
+    align-items: center;
+    margin: 20px;
+}
+
+.formInput input {
+    font-size: 20px;
+    border-radius: 10px;
+    padding: 5px;
+    border: none;
+}
+
+.btnSubmit {
+    display: block;
+    margin: auto;
+    width: 75%;
+    color: #ffffff;
+    background-color: #00c3ff94;
+    border: none;
+    border-radius: 10px;
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}

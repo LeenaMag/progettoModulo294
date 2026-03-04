@@ -16,7 +16,8 @@ import { checkExpiredAuctions } from './utils/item_utils.js'
 const app = express()
 
 const corsOptions = {
-    origin: ["http://localhost:5174", "http://172.0.0.1:5174"]
+    origin: ["http://localhost:5174", "http://172.0.0.1:5174"],
+    credentials: true
 }
 
 app.use(cors(corsOptions))
@@ -32,25 +33,25 @@ app.use(expressLayouts)*/
 //--------------------------------------------------------------------------------------------
 
 //ENDPOINT - localhost:3000/ -GET
-app.get("/",function(request, response){
+app.get("/", function (request, response) {
     response.send("Risposta da endpoint")
 })
 
-app.listen("3000", /*function () {} oppure */ () => {
+app.listen("3000", /*function () {} oppure */() => {
     console.log("App avviata sulla porta 3000")
 })
 
-app.use((req, res) => {
-    res.status(404).send("La pagina inserita non esiste");
-});
+// app.use((req, res) => {
+//     res.status(404).send("La pagina inserita non esiste");
+// });
 
 
 
 
-const option ={
+const option = {
     definition: {
         openapi: "3.0.0",
-        info: { 
+        info: {
             title: "Prova di API doc",
             version: "0.1"
         },
@@ -64,11 +65,11 @@ const option ={
 }
 
 setInterval(async () => {
-  try {
-    await checkExpiredAuctions();
-  } catch (error) {
-    console.error("Error checking expired auctions:", error);
-  }
+    try {
+        await checkExpiredAuctions();
+    } catch (error) {
+        console.error("Error checking expired auctions:", error);
+    }
 }, 2 * 60 * 1000);
 
 app.use(session({
@@ -87,7 +88,7 @@ app.use((req, res, next) => {
 });
 
 //Form submission inserite in req.body
-app.use(express.urlencoded({extended: true}))
+app.use(express.urlencoded({ extended: true }))
 //Trasforma il req.body in formato JSON
 app.use(express.json())
 
