@@ -7,9 +7,10 @@
      
 }
 .center{ 
-    width: 80%;
-    max-width: 900px;
+    width: 900px;
+    height: 400px;
     margin: 0 auto;   
+    margin-top: 20px;
     background-color: #858383;
     border-radius: 20px;
     display: flex;
@@ -27,9 +28,17 @@ h2{
 }
 
 .colR{
-    width: 200px;
+    width: 40%;
 }
 
 .colL{
-    width: 200px;
+    width: 40%;
+    height: 75%;
+
+}
+
+.file-input{
+    width: 100%;
+    border: black 1px solid;
+    height: 100%;
 }

@@ -10,7 +10,7 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         const checkAuth = async () => {
             try {
-                const response = await fetch('http://127.0.0.1:3000/checkAuth', {
+                const response = await fetch('http://127.0.0.1:3000/user/checkAuth', {
                     credentials: 'include',
                 });
                 const data = await response.json();
@@ -29,11 +29,8 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     const login = async (username, password) => {
-        const response = await fetch('http://127.0.0.1:3000/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            credentials: 'include',
-            body: JSON.stringify({ username, password })
+        const response = await fetch(`http://127.0.0.1:3000/user/login/${username}/${password}`, {
+            credentials: 'include'
         });
 
         if (!response.ok) {
@@ -47,7 +44,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     const logout = async () => {
-        await fetch('http://127.0.0.1:3000/logout', {
+        await fetch('http://127.0.0.1:3000/user/logout', {
             credentials: 'include'
         });
         setUser(null);

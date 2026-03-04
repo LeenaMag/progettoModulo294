@@ -47,6 +47,7 @@ import {
   checkChatExist,
   addValutation
 } from '../utils/user_utils.js'
+import bcrypt from 'bcryptjs';
 import multer from 'multer'
 
 const upload = multer({ dest: 'uploads/users' });
