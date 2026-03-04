@@ -1,0 +1,11 @@
+#img{
+    border-radius: 50px;
+}
+
+#username{
+    color: aliceblue;
+}
+
+#container{
+    display: flex;
+}
