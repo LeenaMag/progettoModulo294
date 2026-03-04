@@ -16,7 +16,7 @@ import { checkExpiredAuctions } from './utils/item_utils.js'
 const app = express()
 
 const corsOptions = {
-    origin: ["http://localhost:5174", "http://172.0.0.1:5174"]
+    origin: ["http://localhost:5173", "http://172.0.0.1:5173"]
 }
 
 app.use(cors(corsOptions))
@@ -40,9 +40,9 @@ app.listen("3000", /*function () {} oppure */ () => {
     console.log("App avviata sulla porta 3000")
 })
 
-app.use((req, res) => {
-    res.status(404).send("La pagina inserita non esiste");
-});
+// app.use((req, res) => {
+//     res.status(404).send("La pagina inserita non esiste");
+// });
 
 
 
