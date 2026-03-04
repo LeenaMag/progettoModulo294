@@ -559,4 +559,15 @@ router.post('/addValutation/:nota/:userId', isAuthenticated, async (req, res) =>
     console.error(error)
   }
 })
+
+
+
+router.get("/checkAuth", (req, res) => {
+    if (req.session.user) {
+        res.status(200).json({ loggedIn: true, user: req.session.user.username });
+    } else {
+        res.status(200).json({ loggedIn: false });
+    }
+});
+
 export { router }
