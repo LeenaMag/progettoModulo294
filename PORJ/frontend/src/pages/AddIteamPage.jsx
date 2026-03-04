@@ -46,19 +46,19 @@ export default function AddItemPage() {
                             <input type="file" name="prod_img" accept="image/*" className="file-input" required />
                         </div>
                         <div className='colR'>
-                            <input type="text" name="prod_nome" placeholder="Nome del prodotto" required />
+                            <input type="text" name="prod_nome" placeholder="Nome del prodotto" required className='nome' />
 
-                            <input type="number" name="prod_prezzo" placeholder="Prezzo (CHF)" step="0.05" required />
+                            <input type="number" name="prod_prezzo" placeholder="Prezzo (CHF)" step="0.05" required className='prezzo'/>
 
                             
-                            <select name="prod_tipologia" required>
+                            <select name="prod_tipologia" required className='tag'>
                                 {tags && tags.map((tipo) => (
                                     <option key={tipo.id} value={tipo.id}>
                                     {tipo.nome}
                                     </option>
                                 ))}   
                             </select>
-                            <textarea name="prod_descrizione" placeholder="Descrizione del prodotto breve" rows="3" required></textarea>
+                            <textarea name="prod_descrizione" placeholder="Descrizione del prodotto breve" rows="3" required className='descrizione'></textarea>
                         </div>
                     </div>
                 <button type="submit" className="submit-btn">Aggiungi</button>
