@@ -29,6 +29,7 @@ export default function Singup() {
             {error && <div className="errorMessage">{error}</div>}
 
             <form onSubmit={handleSubmit} className="authForm">
+                <input type="file" name="prod_img" accept="image/*" className="profile-input" required />
                 <div className="formInput">
                     <input type="text" id="username" name="username" placeholder='username' required />
                 </div>
