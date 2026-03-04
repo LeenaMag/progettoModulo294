@@ -48,7 +48,9 @@ import {
   findOffer,
   setNewTime
 } from '../utils/item_utils.js'
+import multer from 'multer'
 import { isAuthenticated, createChat, checkChatExist } from '../utils/user_utils.js'
+const upload = multer({ dest: 'uploads/' });
 
 const router = express.Router()
 
@@ -204,10 +206,10 @@ router.post('/items/chats/:itemId', isAuthenticated, async (req, res) => {
  *       500:
  *         description: Errore interno del server
  */
-router.post('/items', isAuthenticated, async (req, res) => {
+router.post('/items', isAuthenticated,  upload.single('prod_img'), async (req, res) => {
   try {
-    const { picture, name, price, description, fk_tag } = req.body
-    if (!picture || !name || !price || !description || !fk_tag) {
+    const { name, price, description, fk_tag } = req.body
+    if ( !name || !price || !description || !fk_tag) {
       res.statusCode = 401
       res.setHeader('Content-Type', 'application/json')
       return res.end(
@@ -218,6 +220,7 @@ router.post('/items', isAuthenticated, async (req, res) => {
     }
 
     const userId = req.session.user.id
+    const picture = `http://127.0.0.1:${process.env.SERVER_PORT}/uploads/items/${req.file.filename}`
     const now = new Date()
     const formattedDate = now.getFullYear() +
       '-' +

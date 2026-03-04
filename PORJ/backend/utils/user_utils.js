@@ -2,10 +2,10 @@ import path from 'path'
 import { con } from '../connection.js'
 import bcrypt from 'bcryptjs'
 
-export async function createUser(firstName, lastName, username, signupDate, passwordHash, passwordSalt) {
+export async function createUser(foto, firstName, lastName, username, signupDate, passwordHash, passwordSalt) {
   const user = await con.query(
-    `INSERT INTO utente(nome, cognome, username, dataIscrizione, pswd, salt) VALUES ( ?, ?,  ?,  ?,?, ?)`,
-    [firstName, lastName, username, signupDate, passwordHash, passwordSalt]
+    `INSERT INTO utente(foto, nome, cognome, username, dataIscrizione, pswd, salt) VALUES ( ?, ?,  ?,  ?,?, ?, ?)`,
+    [foto, firstName, lastName, username, signupDate, passwordHash, passwordSalt]
   )
   return user
 }
