@@ -47,8 +47,10 @@ import {
   checkChatExist,
   addValutation
 } from '../utils/user_utils.js'
-import bcrypt from 'bcryptjs'
-import { con } from '../connection.js'
+import multer from 'multer'
+
+const upload = multer({ dest: 'uploads/users' });
+
 
 const router = express.Router()
 
@@ -83,7 +85,7 @@ const router = express.Router()
  *                 errore:
  *                   type: string
  */
-router.post('/signup', async (req, res) => {
+router.post('/signup', upload.single('prod_img') , async (req, res) => {
   try {
     const { username, password, firstName, lastName } = req.body
 
@@ -107,6 +109,7 @@ router.post('/signup', async (req, res) => {
     }
 
     const createdUser = await createUser(
+      `http://127.0.0.1:${process.env.SERVER_PORT}/uploads/users/${req.file.filename}`,
       firstName,
       lastName,
       username,
