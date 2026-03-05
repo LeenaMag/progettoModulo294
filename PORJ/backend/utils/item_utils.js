@@ -156,6 +156,14 @@ export async function setStatus(auctionId){
   )
   return result
 }*/
+
+export async function addTimeAuction(auctionId, time){
+  const [result] = await con.query(
+    `UPDATE asta SET dataF = ? WHERE id = ?`,[time, auctionId]
+  )
+  return result
+}
+
 export async function newAuction(itemId, dataI, minPrice, dataF) {
   const [result] = await con.query(
     `INSERT INTO asta (fk_oggetto, dataI, dataF, minPrezzo) VALUES (?, ?, ?, ?)`,

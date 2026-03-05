@@ -164,7 +164,7 @@ export async function loader({ params, request }) {
   }
 
   // 1) Prendo l'oggetto
-  const itemRes = await fetch(`http://localhost:3000/Items/items/${itemId}`);
+  const itemRes = await fetch(`http://localhost:3000/Items/itemsId/${itemId}`);
   if (!itemRes.ok) {
     throw new Error("Impossibile caricare l'oggetto");
   }
