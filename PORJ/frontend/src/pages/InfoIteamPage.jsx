@@ -173,7 +173,7 @@ export async function loader({ params, request }) {
   // 2) Con i dati dell'oggetto, prendo tag + proprietario
   const [tagRes, ownerRes] = await Promise.all([
     fetch(`http://localhost:3000/search/tag/${item.fk_tag}`),
-    fetch(`http://localhost:3000/user/user/${item.fk_utente}`, { credentials: 'include' })
+    fetch(`http://localhost:3000/user/userId/${item.fk_utente}`, { credentials: 'include' })
   ]);
 
   if (!tagRes.ok) {

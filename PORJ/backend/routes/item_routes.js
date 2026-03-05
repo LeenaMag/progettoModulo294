@@ -348,7 +348,7 @@ router.delete('/items/favorites/:itemId', isAuthenticated, async (req, res) => {
       return res.end(JSON.stringify({ error: 'Oggetto inesistente' }))
     }
     const checkFavorite = await isItemInFavorites(userId, itemId)
-    if (checkFavorite.lenght > 0) {
+    if (checkFavorite.lenght === 0) {
       res.statusCode = 400
       res.setHeader('Content-Type', 'application/json')
       return res.end(JSON.stringify({ error: 'Oggetto non presente fra i preferiti' }))
@@ -383,7 +383,7 @@ router.post('/items/cart', isAuthenticated, async (req, res) => {
     const { itemId } = req.body
     const item = await getItemById(itemId)
 
-    if (item.lenght > 0) {
+    if (item === undefined) {
       res.statusCode = 401
       res.setHeader('Content-Type', 'application/json')
       return res.end(JSON.stringify({ error: 'Oggetto inesistente' }))
@@ -422,7 +422,7 @@ router.delete('/items/cart/:itemId', isAuthenticated, async (req, res) => {
       return res.end(JSON.stringify({ error: 'Oggetto inesistente' }))
     }
     const checkCart = await isItemInCart(userId, itemId)
-    if (checkCart.affectedRows === 0) {
+    if (checkCart.length === 0) {
       res.statusCode = 400
       res.setHeader('Content-Type', 'application/json')
       return res.end(JSON.stringify({ error: 'Oggetto non presente nel carello' }))
@@ -615,13 +615,13 @@ router.patch('/items/update', isAuthenticated, async (req, res) => {
  *   
  * 
  */
-router.post('/items/auction/createAuction', isAuthenticated, async(req, res) => {
+/*router.post('/items/auction/createAuction', isAuthenticated, async(req, res) => {
   try {
     const userId = req.session.user.id
     const { itemId, dataI, minPrice, dataF} = req.body
     
 
-    /*const item = await getItemById(itemId)
+    //const item = await getItemById(itemId)
 
     if (item.lenght > 0) {
       res.statusCode = 401
@@ -635,7 +635,7 @@ router.post('/items/auction/createAuction', isAuthenticated, async(req, res) => 
 
     res.statusCode = 200
     res.setHeader('Content-Type', 'application/json')
-    res.end()*/
+    res.end()//
     const item = await getItemById(itemId);
 
     if (!item) {
@@ -655,7 +655,30 @@ router.post('/items/auction/createAuction', isAuthenticated, async(req, res) => 
     res.setHeader('Content-Type', 'application/json')
     res.end(JSON.stringify({ error: err }))
   }
-})
+})*/
+
+router.post('/items/auction/createAuction', isAuthenticated, async (req, res) => {
+  try {
+    const userId = req.session.user.id;
+    const { itemId, dataI, minPrice, dataF } = req.body;
+
+    const item = await getItemById(itemId);
+
+    if (!item) {
+      return res.status(404).json({ error: 'Oggetto inesistente' });
+    }
+
+    if (item.fk_utente !== userId) {
+      return res.status(403).json({ error: 'Non sei il proprietario dell’oggetto' });
+    }
+
+    await newAuction(itemId, dataI, minPrice, dataF);
+    return res.status(200).end();
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: String(err) });
+  }
+});
 
 /**
  * @swagger
