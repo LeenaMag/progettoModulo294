@@ -1,0 +1,39 @@
+.icon {
+    height: 22px;
+    width: 22px;
+    margin: 0;
+    opacity: .9;
+    cursor: pointer;
+    transition: transform .12s ease, opacity .12s ease;
+}
+
+.icon:hover {
+    opacity: 1;
+    transform: scale(1.05);
+}
+
+
+.messageBar {
+    width: 90%;
+    background-color: rgba(18, 27, 46, .70);
+}
+
+.inputMessage {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+
+    border: none;
+    background: transparent;
+
+    font-size: 1rem;
+    outline: none;
+    box-shadow: none;
+}
+
+.sendButton {
+    height: 100%;
+    width: 100%;
+    border-radius: 20px;
+    background: linear-gradient(135deg, rgba(45,212,255,.85), rgba(96,165,250,.85));
+}
