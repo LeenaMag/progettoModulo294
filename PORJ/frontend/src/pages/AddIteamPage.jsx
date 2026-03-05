@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import SearchBar from "../components/searchBar";
+import SearchBar from '../components/SearchBar';
 import { useNavigate, useLoaderData, Link } from 'react-router-dom';
 import './AddIteamPage.css';
 import PrewiewOwner from '../components/PrewiewOwner';

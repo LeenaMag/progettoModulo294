@@ -294,3 +294,19 @@ export async function checkExpiredAuctions() {
   }
 }
 
+export async function getOpenAuctionsRich() {
+  const [rows] = await con.query(`
+    SELECT 
+      a.*,
+      o.id   AS itemId,
+      o.nome AS itemNome,
+      o.foto AS itemFoto,
+      off.valore AS currentPrice
+    FROM asta a
+    JOIN oggetto o ON o.id = a.fk_oggetto
+    LEFT JOIN offerta off ON off.id = a.fk_offerta
+    WHERE a.aperta = true
+    ORDER BY a.dataF ASC
+  `);
+  return rows;
+}

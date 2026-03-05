@@ -19,12 +19,12 @@ export async function createMessage(text, sentAt, userId, chatId) {
 }
 
 export async function getUserByUsername(username) {
-  const [users] = await con.query(`SELECT * FROM utente WHERE username=?`, username)
+  const [users] = await con.query(`SELECT * FROM utente WHERE username=?`, [username])
   return users[0]
 }
 
 export async function getUserById(id) {
-  const [users] = await con.query(`SELECT * FROM utente WHERE id=?`, id)
+  const [users] = await con.query(`SELECT * FROM utente WHERE id=?`, [id])
   return users[0]
 }
 
@@ -34,7 +34,7 @@ export async function getChatsByUserId(userId) {
 }
 
 export async function getMessagesByChatId(chatId) {
-  const [messages] = await con.query(`SELECT * FROM messaggio WHERE fk_chat=?`, chatId)
+  const [messages] = await con.query(`SELECT * FROM messaggio WHERE fk_chat=?`, [chatId])
   return messages
 }
 

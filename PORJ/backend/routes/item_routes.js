@@ -887,4 +887,14 @@ router.post('/items/auction/newOffer', isAuthenticated, async (req, res) => {
   }
 });
 
+import { getOpenAuctionsRich } from '../utils/item_utils.js';
+
+router.get('/items/auction/open', async (req, res) => {
+  try {
+    res.status(200).json(await getOpenAuctionsRich());
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: String(err) });
+  }
+});
 export { router }

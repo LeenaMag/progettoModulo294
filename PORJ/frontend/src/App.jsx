@@ -12,6 +12,7 @@ import ItemPage, { loader as iteamLoader } from './pages/InfoIteamPage.jsx'
 import AddItemPage from './pages/AddIteamPage.jsx'
 import InfoIteam from './pages/InfoIteamPage.jsx'
 import ChatPage, {loader as chatLoader} from './pages/ChatPage.jsx'
+import AuctionListPage, { loader as auctionsLoader } from './pages/AuctionListPage.jsx';
 
 
 
@@ -29,6 +30,8 @@ const router = createBrowserRouter([{
     { path: "/infoIteam", element: <InfoIteam />, loader: iteamLoader },
     { path: "/infoIteam/:itemId", element: <InfoIteam />, loader: iteamLoader },
     { path: "/chat/:ownerId", element: <ChatPage />, loader: chatLoader },
+    { path: "/auctions", element: <AuctionListPage />, loader: auctionsLoader },
+    { path: "/auctions/:ricerca", element: <AuctionListPage />, loader: auctionsLoader },
     //{ path: "/infoIteam", element: <InfoIteam />, loader: iteamLoader },
     // { path: "addItem", element: <AddItemPage /> }
   ]

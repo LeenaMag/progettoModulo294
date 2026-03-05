@@ -490,7 +490,7 @@ router.post('/messages', isAuthenticated, async (req, res) => {
     const userId = req.session.user.id
     const { text, chatId } = req.body
 
-    console.log(chatId)
+    
 
     const messages = await getMessagesByChatId(chatId)
     const chatAccess = await getChatByUserIdAndChatId(userId, chatId)
