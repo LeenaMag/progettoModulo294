@@ -11,6 +11,8 @@ import Singup from './pages/Singup.jsx'
 import ItemPage, { loader as iteamLoader } from './pages/InfoIteamPage.jsx'
 import AddItemPage from './pages/AddIteamPage.jsx'
 import InfoIteam from './pages/InfoIteamPage.jsx'
+import ChatPage, {loader as chatLoader} from './pages/ChatPage.jsx'
+
 
 
 const router = createBrowserRouter([{
@@ -26,6 +28,7 @@ const router = createBrowserRouter([{
     { path: "/Singup", element: <Singup /> },
     { path: "/infoIteam", element: <InfoIteam />, loader: iteamLoader },
     { path: "/infoIteam/:itemId", element: <InfoIteam />, loader: iteamLoader },
+    { path: "/chat/:ownerId", element: <ChatPage />, loader: chatLoader },
     //{ path: "/infoIteam", element: <InfoIteam />, loader: iteamLoader },
     // { path: "addItem", element: <AddItemPage /> }
   ]
