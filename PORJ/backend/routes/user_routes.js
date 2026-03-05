@@ -168,8 +168,7 @@ router.post('/signup', upload.single('prod_img'), async (req, res) => {
 router.patch('/modify', isAuthenticated, async (req, res) => {
   try {
     const { username, password, firstName, lastName } = req.body
-    console.log(username)
-
+  
     const credentials = await validateUserCredentials(username, password, firstName, lastName, res)
 
     if (credentials.error != undefined) {
@@ -270,7 +269,7 @@ router.get('/login/:username/:password', async (req, res) => {
       )
     })
 
-    console.log(JSON.stringify(req.session.user.id))
+
   } catch (error) {
     console.error(error)
     res.statusCode = 500
@@ -460,7 +459,7 @@ router.get('/messages/:chatId', isAuthenticated, async (req, res) => {
     }
 
     if (chatAccess === undefined) {
-      console.log(userId)
+
       res.statusCode = 401
       res.setHeader('Content-Type', 'application/json')
       return res.end(JSON.stringify({ error: "Chat non appartenente all'utente loggato" }))
@@ -490,6 +489,8 @@ router.post('/messages', isAuthenticated, async (req, res) => {
   try {
     const userId = req.session.user.id
     const { text, chatId } = req.body
+
+    console.log(chatId)
 
     const messages = await getMessagesByChatId(chatId)
     const chatAccess = await getChatByUserIdAndChatId(userId, chatId)
@@ -577,7 +578,7 @@ router.post('/chats', isAuthenticated, async (req, res) => {
 router.get("/checkAuth", (req, res) => {
   if (req.session.user) {
     res.status(200).json({ loggedIn: true, username: req.session.user.username, foto: req.session.user.foto });
-    console.log("SESSION USER:", req.session.user);
+
   } else {
     res.status(200).json({ loggedIn: false });
   }
@@ -633,7 +634,7 @@ router.get('/chatMessages/:user1', isAuthenticated,async (req, res) => {
         ':' +
         now.getMinutes()
 
-      await createMessage("", formattedDate, user2, chatId)
+      await createMessage("", formattedDate, user2, chatId.id)
     }
 
     const messages = await getMessagesByChatId(chatId.id)
@@ -644,8 +645,7 @@ router.get('/chatMessages/:user1', isAuthenticated,async (req, res) => {
       return res.end(JSON.stringify({ error: 'Chat inesisistente e impossibile crearla' }))
     }
 
-    res.setHeader('Content-Type', 'application/json')
-    res.end(JSON.stringify(messages))
+    res.json({chatId: chatId.id, messages})
   } catch (error) {
     console.error(error)
   }

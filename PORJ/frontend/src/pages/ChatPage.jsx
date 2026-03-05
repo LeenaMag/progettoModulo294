@@ -18,7 +18,9 @@ export default function ChatPage() {
         const text = document.getElementById("inputMessage").value
         fetch("http://localhost:3000/user/messages", {
             method: "POST",
-            body: { text: text, chatId: info.messages[0].fk_chat}
+            credentials: 'include',
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ text: text, chatId: info.chatId})
         })
         location.reload()
     }
@@ -37,8 +39,8 @@ export default function ChatPage() {
 }
 
 export async function loader({ params }) {
-    let user = await fetch(`http://localhost:3000/user/userId/${params.ownerId}`)
-    let chat = await fetch(`http://localhost:3000/user/chatMessages/${params.ownerId}`)
+    let user = await fetch(`http://localhost:3000/user/userId/${params.ownerId}`, {credentials: 'include'})
+    let chat = await fetch(`http://localhost:3000/user/chatMessages/${params.ownerId}`, {credentials: 'include'})
 
     if (!user.ok && !chat.ok) {
         throw new Error('Could not fetch items');

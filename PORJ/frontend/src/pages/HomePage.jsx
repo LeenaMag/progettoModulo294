@@ -41,7 +41,7 @@ export async function loader({ params }) {
 
     const json = response.json()
 
-    console.log(json)
+    //console.log(json)
 
     return json;
 }

@@ -56,7 +56,7 @@ export async function getChatByUsers(userId1, userId2) {
 
 
 export async function getItemsForSaleByUserId(userId) {
-  const [items] = await con.query(`SELECT * FROM oggetto WHERE fk_utente=?`, userId)
+  const [items] = await con.query(`SELECT * FROM oggetto WHERE fk_utente=?`, [userId])
   return items
 }
 

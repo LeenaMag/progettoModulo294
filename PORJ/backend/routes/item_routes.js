@@ -563,8 +563,7 @@ router.get('/favorites', isAuthenticated, async (req, res) => {
 router.patch('/items/update', isAuthenticated, async (req, res) => {
   try {
     const { id: itemId, price, picture, description, name, fk_tag } = req.body
-    console.log(itemId)
-    console.log(name)
+
 
     if (!picture || !name || !price || !description || !fk_tag || !itemId) {
       res.statusCode = 401
