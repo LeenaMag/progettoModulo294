@@ -621,7 +621,7 @@ router.post('/items/auction/createAuction', isAuthenticated, async(req, res) => 
     const { itemId, dataI, minPrice, dataF} = req.body
     
 
-    const item = await getItemById(itemId)
+    /*const item = await getItemById(itemId)
 
     if (item.lenght > 0) {
       res.statusCode = 401
@@ -635,7 +635,19 @@ router.post('/items/auction/createAuction', isAuthenticated, async(req, res) => 
 
     res.statusCode = 200
     res.setHeader('Content-Type', 'application/json')
-    res.end()
+    res.end()*/
+    const item = await getItemById(itemId);
+
+    if (!item) {
+      return res.status(404).json({ error: 'Oggetto inesistente' });
+    }
+
+    if (item.fk_utente !== userId) {
+      return res.status(403).json({ error: 'Non sei il proprietario' });
+    }
+
+    await newAuction(itemId, dataI, minPrice, dataF);
+    return res.status(200).end();
     
   } catch (err) {
     console.error(err)

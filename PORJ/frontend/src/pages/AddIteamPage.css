@@ -85,7 +85,7 @@
 .nome{ margin-top: 14px; }
 .nome, .prezzo{ height: 42px; }
 .tag{ height: 44px; }
-.descrizione{ height: 120px; resize: vertical; }
+.descrizione{ height: 120px; resize: vertical; resize: none;}
 
 /* Button */
 .submit-btn{
@@ -101,6 +101,7 @@
   .prewiewOwner{ justify-content: flex-start; }
   .file-input{ min-height: 220px; }
 }
+
 
 /*
 // ===== Main card ===== 

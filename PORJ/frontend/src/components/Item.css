@@ -97,3 +97,26 @@
   .item-conteiner{ flex-basis: 100%; }
 }
 
+/* ========= Item card ========= */
+.item-link{
+  text-decoration: none;
+  color: inherit;
+  display: block;
+
+  /* Link is the flex item inside HomePage rows */
+  flex: 1 1 calc(33.333% - 16px);
+  min-width: 240px;
+}
+
+.item-conteiner{
+  width: 100%;
+  cursor: pointer;
+}
+
+/* Responsive */
+@media (max-width: 980px){
+  .item-link{ flex-basis: calc(50% - 16px); }
+}
+@media (max-width: 620px){
+  .item-link{ flex-basis: 100%; }
+}
