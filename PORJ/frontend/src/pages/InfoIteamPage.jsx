@@ -112,10 +112,31 @@ export default function InfoIteamPage() {
 
       <div className="center">
         <div className="info-title-row">
-          <h2>Dettagli Prodotto</h2>
-          <button type="button" className="back-btn" onClick={() => navigate(-1)}>
-            Indietro
-          </button>
+          <div className="info-title-row">
+            <h2>Dettagli Prodotto</h2>
+
+            <div className="top-actions">
+                <button type="button" className="top-action-btn">
+                Chat
+                </button>
+
+                <button type="button" className="top-action-btn">
+                Preferiti
+                </button>
+
+                <button type="button" className="top-action-btn">
+                Carrello
+                </button>
+
+                <button
+                type="button"
+                className="back-btn"
+                onClick={() => navigate(-1)}
+                >
+                Indietro
+                </button>
+            </div>
+            </div>
         </div>
 
         <div className="prewiewOwner">
@@ -163,14 +184,14 @@ export async function loader({ params, request }) {
     throw new Error("Manca l'id dell'oggetto (itemId)");
   }
 
-  // 1) Prendo l'oggetto
+  // Prima recupera le informazioni dell'oggetto che servono dopo
   const itemRes = await fetch(`http://localhost:3000/Items/itemsId/${itemId}`);
   if (!itemRes.ok) {
     throw new Error("Impossibile caricare l'oggetto");
   }
   const item = await itemRes.json();
 
-  // 2) Con i dati dell'oggetto, prendo tag + proprietario
+  // Con i dati dell'oggetto, si recuperano le informazioni di tag e proprietario
   const [tagRes, ownerRes] = await Promise.all([
     fetch(`http://localhost:3000/search/tag/${item.fk_tag}`),
     fetch(`http://localhost:3000/user/userId/${item.fk_utente}`, { credentials: 'include' })
@@ -183,6 +204,9 @@ export async function loader({ params, request }) {
     throw new Error("Impossibile caricare l'utente proprietario");
   }
 
-  const [tag, owner] = await Promise.all([tagRes.json(), ownerRes.json()]);
+  const [tagJson, owner] = await Promise.all([tagRes.json(), ownerRes.json()]);
+
+  const tag = Array.isArray(tagJson) ? (tagJson[0] ?? null) : tagJson;
+
   return { item, tag, owner };
 }

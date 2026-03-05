@@ -95,3 +95,27 @@
   .prewiewOwner{ justify-content: flex-start; }
   .image-box, .item-image{ min-height: 220px; }
 }
+
+.top-actions{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.top-action-btn{
+  width: min(150px, 100%);
+  height: 42px;
+  border-radius: 999px;
+}
+
+/* su schermi piccoli vanno a capo bene */
+@media (max-width: 720px){
+  .top-action-btn, .back-btn{
+    width: 100%;
+  }
+  .top-actions{
+    width: 100%;
+  }
+}
