@@ -156,17 +156,30 @@ export async function setStatus(auctionId){
   )
   return result
 }*/
-export async function getOffers(){
-  const [result] = await con.query(
-  `SELECT* FROM offerta`)
-  return result
-}
-
 export async function newAuction(itemId, dataI, minPrice, dataF) {
   const [result] = await con.query(
     `INSERT INTO asta (fk_oggetto, dataI, dataF, minPrezzo) VALUES (?, ?, ?, ?)`,
     [itemId, dataI, dataF, minPrice]
   );
+  return result;
+}
+
+export async function newOffer(userId, auctionId, price) {
+  const [result] = await con.query(
+    `INSERT INTO offerta (fk_utente, fk_asta, valore) VALUES (?, ?, ?)`,
+    [userId, auctionId, price]
+  );
+  return result;
+}
+
+export async function getOffers() {
+  const [result] = await con.query(`SELECT * FROM offerta`);
+  return result;
+}
+
+/* utile per scadenze: prendere direttamente le aste aperte */
+export async function getOpenAuctions() {
+  const [result] = await con.query(`SELECT * FROM asta WHERE aperta = true`);
   return result;
 }
 
@@ -178,14 +191,6 @@ export async function infoAuction(auctionId) {
   return result[0]; // singola asta
 }
 
-export async function newOffer(userId, auctionId, price) {
-  const [result] = await con.query(
-    `INSERT INTO offerta (fk_utente, fk_asta, valore) VALUES (?, ?, ?)`,
-    [userId, auctionId, price]
-  );
-  return result;
-}
-
 export async function infoOffer(offerId) {
   const [result] = await con.query(
     `SELECT * FROM offerta WHERE id = ?`,
@@ -193,15 +198,13 @@ export async function infoOffer(offerId) {
   );
   return result[0];
 }
-export async function addTimeAuction(auctionId, time){
-  const [result] = await con.query(
-    `UPDATE asta SET dataF = ? WHERE id = ?`,[time, auctionId]
-  )
-  return result
-}
+
 export async function findOffer(userId, auctionId, price) {
   const [result] = await con.query(
-    `SELECT * FROM offerta WHERE fk_utente = ? AND fk_asta = ? AND valore = ?`,
+    `SELECT * FROM offerta 
+     WHERE fk_utente = ? AND fk_asta = ? AND valore = ?
+     ORDER BY id DESC
+     LIMIT 1`,
     [userId, auctionId, price]
   );
   return result[0];
@@ -232,7 +235,7 @@ export async function setStatus(auctionId) {
 }
 
 
-export async function checkExpiredAuctions() {
+/*export async function checkExpiredAuctions() {
   const now = new Date();
   const offers = await getOffers();
 
@@ -246,6 +249,39 @@ export async function checkExpiredAuctions() {
 
     if (inputDate <= now) {
       await setStatus(row.id);
+    }
+  }
+}*/
+
+function parseAuctionDate(input) {
+  // supporta: "YYYY.MM.DD HH:MM" oppure "YYYY-MM-DD HH:MM" (e anche con :SS)
+  if (!input || typeof input !== "string") return null;
+
+  const [datePart, timePartRaw] = input.split(" ");
+  if (!datePart || !timePartRaw) return null;
+
+  const sep = datePart.includes(".") ? "." : "-";
+  const [y, m, d] = datePart.split(sep).map(Number);
+
+  const timePart = timePartRaw.trim();
+  const [hh, mm, ss] = timePart.split(":").map(Number);
+
+  if (![y, m, d, hh, mm].every(n => Number.isFinite(n))) return null;
+  return new Date(y, m - 1, d, hh, mm, Number.isFinite(ss) ? ss : 0);
+}
+
+export async function checkExpiredAuctions() {
+  const now = new Date();
+  const auctions = await getOpenAuctions();
+
+  for (const auction of auctions) {
+    const endDate = parseAuctionDate(auction.dataF);
+
+    // se dataF è NULL o non parsabile, non chiudiamo (evita crash)
+    if (!endDate) continue;
+
+    if (endDate <= now) {
+      await setStatus(auction.id);
     }
   }
 }

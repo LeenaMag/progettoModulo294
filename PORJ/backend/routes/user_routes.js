@@ -583,7 +583,7 @@ router.get("/checkAuth", (req, res) => {
 });
 
 
-router.get('/user/:id',  async (req, res) => {
+router.get('/userId/:id',  async (req, res) => {
   try {
     const id = req.params.id
     const user = await getUserById(id)
