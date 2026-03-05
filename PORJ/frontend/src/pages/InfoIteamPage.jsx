@@ -99,7 +99,7 @@ import './InfoIteamPage.css';
 
 import React from 'react';
 import SearchBar from "../components/searchBar";
-import { useNavigate, useLoaderData } from 'react-router-dom';
+import { useNavigate, useLoaderData, Link } from 'react-router-dom';
 import PrewiewOwner from '../components/PrewiewOwner';
 
 export default function InfoIteamPage() {
@@ -116,8 +116,8 @@ export default function InfoIteamPage() {
             <h2>Dettagli Prodotto</h2>
 
             <div className="top-actions">
-                <button type="button" className="top-action-btn">
-                Chat
+                <button type="button" className="top-action-btn"><Link to={`/chat/${owner?.id}`}>Chat</Link>
+                
                 </button>
 
                 <button type="button" className="top-action-btn">

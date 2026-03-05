@@ -269,6 +269,8 @@ router.get('/login/:username/:password', async (req, res) => {
         })
       )
     })
+
+    console.log(JSON.stringify(req.session.user.id))
   } catch (error) {
     console.error(error)
     res.statusCode = 500
@@ -609,17 +611,31 @@ router.get('/userId/:id', async (req, res) => {
   }
 })
 
-router.get('/chatMessages/:user1', isAuthenticated, async (req, res) => {
+router.get('/chatMessages/:user1', isAuthenticated,async (req, res) => {
   try {
     const user1 = req.params.user1
     const user2 = req.session.user.id
 
     let chatId = await getChatByUsers(user1, user2)
-    if(chatId.length == 0){
+    if (chatId == undefined) {
       const chat = await createChat(user1, user2)
       chatId = await getChatByUsers(user1, user2)
+
+      const now = new Date()
+      const formattedDate =
+        now.getFullYear() + +
+        '-' +
+        (now.getMonth() + 1) +
+        '-' +
+        now.getDate() +
+        ' ' +
+        now.getHours() +
+        ':' +
+        now.getMinutes()
+
+      await createMessage("", formattedDate, user2, chatId)
     }
-    
+
     const messages = await getMessagesByChatId(chatId.id)
 
     if (messages === undefined) {
