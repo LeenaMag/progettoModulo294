@@ -1,4 +1,4 @@
-.authContainer {
+/*.authContainer {
     place-self: center;
     background-color: #7d7d7d;
     margin: 5px;
@@ -56,4 +56,148 @@
 
 .profile-input{
     color: #7d7d7d;
+}*/
+
+/* ========= Auth pages ========= */
+.authContainer{
+  width: min(460px, 92vw);
+  margin: 28px auto 0;
+  padding: 22px 18px 18px;
+
+  background: rgba(18,27,46,.70);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+
+.authContainer h2{
+  color: rgba(255,255,255,.92);
+  margin-bottom: 14px;
+}
+
+.authForm{
+  display: grid;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+/* Error */
+.errorMessage{
+  background: rgba(251,113,133,.14);
+  border: 1px solid rgba(251,113,133,.45);
+  color: rgba(255,255,255,.90);
+  padding: 10px 12px;
+  border-radius: 12px;
+  width: 100%;
+  margin: 10px 0 6px;
+}
+
+/* Inputs */
+.formInput{
+  display: grid;
+  gap: 8px;
+}
+
+.formInput input{
+  width: 100%;
+  font-size: 1rem;
+}
+
+/* Profile image input */
+.profile-input{
+  width: 100%;
+  background: rgba(18,27,46,.55);
+  border: 1px dashed rgba(255,255,255,.18);
+  border-radius: 14px;
+  padding: 12px;
+  color: rgba(255,255,255,.70);
+}
+
+.profile-input::file-selector-button{
+  margin-right: 10px;
+  border-radius: 999px;
+  padding: 8px 12px;
+  border: 1px solid transparent;
+  background: linear-gradient(135deg, rgba(45,212,255,.85), rgba(96,165,250,.85));
+  color: rgba(0,0,0,.88);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+/* Submit */
+.btnSubmit{
+  width: 100%;
+  margin-top: 6px;
+}
+
+/* Redirect link text */
+#redirectButton{
+  margin-top: 14px;
+  color: rgba(255,255,255,.70);
+  font-weight: 600;
+}
+#redirectButton a{
+  color: var(--primary);
+  font-weight: 800;
+}
+#redirectButton a:hover{ color: var(--primary-2); }
+
+/* Solo campi testuali (NON file) */
+.authContainer input:not([type="file"]){
+  height: 44px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: rgba(18,27,46,.55);
+  border: 1px solid var(--border);
+  color: rgba(255,255,255,.92);
+  font: inherit;
+}
+
+/* Autofill solo per campi NON file */
+.authContainer input:not([type="file"]):-webkit-autofill,
+.authContainer input:not([type="file"]):-webkit-autofill:hover,
+.authContainer input:not([type="file"]):-webkit-autofill:focus,
+.authContainer input:not([type="file"]):-webkit-autofill:active{
+  -webkit-text-fill-color: rgba(255,255,255,.92);
+  -webkit-box-shadow: 0 0 0 1000px rgba(18,27,46,.55) inset;
+  box-shadow: 0 0 0 1000px rgba(18,27,46,.55) inset;
+  border: 1px solid var(--border);
+  caret-color: rgba(255,255,255,.92);
+}
+
+/* 1) Forza font e padding uguali per tutti gli input della form */
+.authContainer form input:not([type="file"]),
+.authForm input:not([type="file"]){
+  font-family: inherit !important;
+  font-size: 1rem !important;
+  font-weight: 500 !important;
+  letter-spacing: 0 !important;
+
+  padding-left: 12px !important;
+  padding-right: 12px !important;
+  text-indent: 0 !important;
+}
+
+/* 2) Forza specificamente il campo username (copre casi comuni) */
+.authContainer input[name="username"],
+.authContainer input#username,
+.authContainer input[type="text"][autocomplete="username"],
+.authContainer input[type="email"][autocomplete="username"]{
+  font-family: inherit !important;
+  font-size: 1rem !important;
+  font-weight: 500 !important;
+
+  padding-left: 12px !important;
+  text-indent: 0 !important;
+}
+
+/* 3) Autofill: evita differenze di font/padding e sfondo */
+.authContainer input:-webkit-autofill{
+  font-family: inherit !important;
+  font-size: 1rem !important;
+  font-weight: 500 !important;
+  -webkit-text-fill-color: rgba(255,255,255,.92) !important;
+  -webkit-box-shadow: 0 0 0 1000px rgba(18,27,46,.55) inset !important;
+  box-shadow: 0 0 0 1000px rgba(18,27,46,.55) inset !important;
 }

@@ -9,7 +9,7 @@ import './PrewiewOwner.css'
     )
 }*/
 
-import './PrewiewOwner.css';
+
 
 export default function PrewiewOwner({ user }) {
   if (!user) return null;

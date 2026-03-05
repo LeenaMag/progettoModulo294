@@ -45,7 +45,8 @@ import {
   updateUserById,
   createChat,
   checkChatExist,
-  addValutation
+  addValutation,
+  getUserById
 } from '../utils/user_utils.js'
 import bcrypt from 'bcryptjs';
 import multer from 'multer'
@@ -580,5 +581,34 @@ router.get("/checkAuth", (req, res) => {
         res.status(200).json({ loggedIn: false });
     }
 });
+
+
+router.get('/user/:id',  async (req, res) => {
+  try {
+    const id = req.params.id
+    const user = await getUserById(id)
+
+    if (user === undefined) {
+      res.statusCode = 401
+      res.setHeader('Content-Type', 'application/json')
+      return res.end(JSON.stringify({ error: 'Utente inesistente' }))
+    }
+
+    const userProfile = {
+      id: user.id,
+      name: user.nome,
+      surname: user.cognome,
+      username: user.username,
+      foto: user.foto,
+      itemsForSale: await getItemsForSaleByUserId(user.id)
+    }
+
+    res.setHeader('Content-Type', 'application/json')
+    res.end(JSON.stringify(userProfile))
+  } catch (error) {
+    console.error(error)
+  }
+})
+
 
 export { router }

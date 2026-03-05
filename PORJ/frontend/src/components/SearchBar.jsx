@@ -10,7 +10,7 @@ export default function SearchBar() {
     return (
         <div id="bar-conteiner">
             <div id="bar">
-                <img src="/search-icon.png" onClick={seaechByString} className="icon"/>
+                <img src="/search_icon_white.png" onClick={seaechByString} className="icon"/>
                 <input type="text" id="seaech-bar"/>
             </div>
         </div>

@@ -1,12 +1,117 @@
-/* ===== Main card ===== */
+/* ========= Add Item Page ========= */
+.center{
+  width: min(980px, 92vw);
+  min-height: 520px;
+  margin: 24px auto 0;
+  padding: 18px;
+
+  background: rgba(18,27,46,.70);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* title (scope it to avoid changing other pages) */
+.center h2{
+  color: rgba(255,255,255,.92);
+  margin: 0 0 6px 0;
+}
+
+.add-item-form{ width: 100%; }
+
+.flexed{
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 18px;
+  width: 100%;
+  align-items: start;
+}
+
+/* columns */
+.colL, .colR{
+  padding-top: 8px;
+  width: auto;
+}
+
+/* Owner aligned right */
+.prewiewOwner{
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  margin-bottom: 6px;
+}
+
+/* File input big box */
+.file-input{
+  width: 100%;
+  min-height: 300px;
+
+  border: 1px dashed rgba(255,255,255,.22);
+  background: rgba(18,27,46,.55);
+  color: rgba(255,255,255,.60);
+
+  padding: 12px;
+  border-radius: var(--radius);
+}
+
+.file-input::file-selector-button{
+  margin-right: 10px;
+  border-radius: 999px;
+  padding: 10px 14px;
+  border: 1px solid transparent;
+  background: linear-gradient(135deg, rgba(45,212,255,.85), rgba(96,165,250,.85));
+  color: rgba(0,0,0,.88);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+/* Inputs */
+.nome, .prezzo, .tag, .descrizione{
+  width: 100%;
+  margin-top: 10px;
+
+  background: rgba(18,27,46,.55);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+
+  padding: 10px 12px;
+  color: rgba(255,255,255,.92);
+}
+
+.nome{ margin-top: 14px; }
+.nome, .prezzo{ height: 42px; }
+.tag{ height: 44px; }
+.descrizione{ height: 120px; resize: vertical; }
+
+/* Button */
+.submit-btn{
+  width: min(240px, 100%);
+  height: 44px;
+  margin-top: 14px;
+  border-radius: 999px;
+}
+
+/* Responsive: stack columns */
+@media (max-width: 860px){
+  .flexed{ grid-template-columns: 1fr; }
+  .prewiewOwner{ justify-content: flex-start; }
+  .file-input{ min-height: 220px; }
+}
+
+/*
+// ===== Main card ===== 
 .center {
-  /* instead of fixed 800px */
+  // instead of fixed 800px 
   width: 80%;
   max-width: 900px;
 
-  /* instead of fixed 520px */
-  min-height: 520px;      /* keeps the old look on desktop */
-  height: auto;           /* grows if content grows */
+  // instead of fixed 520px //
+  min-height: 520px;      // keeps the old look on desktop 
+  height: auto;           // grows if content grows 
 
   margin: 20px auto 0;
   padding: 20px;
@@ -19,18 +124,18 @@
   align-items: center;
 }
 
-/* keep title style */
+// keep title style 
 h2 {
   color: aliceblue;
   margin: 0 0 10px 0;
 }
 
-/* ===== Form ===== */
+// ===== Form ===== 
 .add-item-form {
-  width: 100%;            /* take all the card width */
+  width: 100%;            // take all the card width 
 }
 
-/* Two columns container */
+// Two columns container 
 .flexed {
   display: flex;
   justify-content: center;
@@ -39,13 +144,13 @@ h2 {
   width: 100%;
 }
 
-/* Right column */
+// Right column 
 .colR {
   padding-top: 20px;
   width: 70%;
 }
 
-/* Left column */
+// Left column 
 .colL {
   padding-top: 20px;
   width: 80%;
@@ -53,10 +158,10 @@ h2 {
   justify-content: center;
 }
 
-/* File input big box */
+// File input big box 
 .file-input {
   width: 98%;
-  min-height: 280px;      /* keeps old size */
+  min-height: 280px;      // keeps old size 
   height: auto;
 
   border: 1px solid black;
@@ -78,13 +183,13 @@ h2 {
   cursor: pointer;
 }
 
-/* Inputs: keep same look but make them responsive */
+// Inputs: keep same look but make them responsive 
 .nome, .prezzo, .tag, .descrizione {
   border-radius: 5px;
   background-color: #242424;
   color: white;
   padding: 5px;
-  width: 80%;             /* same as your old look */
+  width: 80%;             // same as your old look 
 }
 
 .nome, .prezzo {
@@ -101,7 +206,7 @@ h2 {
   height: 100px;
 }
 
-/* Button */
+// Button 
 .submit-btn {
   background-color: #00c3ff94;
   color: white;
@@ -110,12 +215,12 @@ h2 {
   border-radius: 10px;
 
   width: 20%;
-  min-width: 140px;       /* so it doesn't become tiny */
+  min-width: 140px;       // so it doesn't become tiny 
   height: 40px;
   cursor: pointer;
 }
 
-/* Owner aligned right */
+// Owner aligned right 
 .prewiewOwner {
   display: flex;
   justify-content: flex-end;
@@ -125,7 +230,7 @@ h2 {
 
 
 
-/* ===== Responsive: when screen is small, stack columns ===== */
+// ===== Responsive: when screen is small, stack columns ===== 
 @media (max-width: 768px) {
   .center {
     width: 92%;
@@ -152,14 +257,14 @@ h2 {
   }
 
   .prewiewOwner {
-    justify-content: center; /* better on mobile */
+    justify-content: center; // better on mobile 
   }
 
   .submit-btn {
     width: 60%;
   }
 }
-
+*/
 /* Questa versione non è dinamica
 .flexed{
     display: flex;

@@ -1,4 +1,35 @@
-/* PrewiewOwner internal */
+/* ========= Preview owner ========= */
+/* Prefer scoping when used inside .prewiewOwner, but keep fallback for current markup */
+.prewiewOwner #container,
+#container{
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 999px;
+
+  background: rgba(18,27,46,.55);
+  border: 1px solid rgba(255,255,255,.10);
+}
+
+.prewiewOwner #img,
+#img{
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  object-fit: cover;
+  border: 1px solid rgba(255,255,255,.16);
+}
+
+.prewiewOwner #username,
+#username{
+  padding: 0;
+  color: rgba(255,255,255,.88);
+  font-weight: 800;
+  font-size: .95rem;
+  white-space: nowrap;
+}
+/*//PrewiewOwner internal 
 #container {
   display: flex;
   align-items: center;
@@ -12,3 +43,4 @@
   padding: 12px;
   color: white;
 }
+  */

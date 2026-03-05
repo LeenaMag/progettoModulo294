@@ -15,3 +15,9 @@ export async function getAllTags() {
   const [tags] = await con.query(`SELECT * FROM tag`)
   return tags
 }
+
+
+export async function getTag(id){
+  const [tag] = await con.query(`SELECT* FROM tag WHERE id = ?`,[id])
+  return tag
+}

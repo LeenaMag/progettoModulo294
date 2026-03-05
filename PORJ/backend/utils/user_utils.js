@@ -23,6 +23,11 @@ export async function getUserByUsername(username) {
   return users[0]
 }
 
+export async function getUserById(username) {
+  const [users] = await con.query(`SELECT * FROM utente WHERE username=?`, username)
+  return users[0]
+}
+
 export async function getChatsByUserId(userId) {
   const [chats] = await con.query(`SELECT * FROM chat WHERE fk_utente1=? OR fk_utente2=?`, [userId, userId])
   return chats

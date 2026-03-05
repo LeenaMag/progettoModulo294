@@ -1,4 +1,4 @@
-.itemContainer {
+/*.itemContainer {
     display: flex;
 }
 
@@ -10,4 +10,31 @@
 
 #containerRaws::-webkit-scrollbar {
     display: none;
+}*/
+/* ========= Home page ========= */
+.itemContainer{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 12px 16px;
+}
+
+#containerRaws::-webkit-scrollbar {
+    display: none;
+}
+
+#containerRaws{
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto 18px;
+  padding: 6px 0 24px;
+  overflow-y: auto;
+  max-height: calc(100vh - var(--header-h) - 150px);
+}
+
+/* keep scrollbar visible but nicer */
+#containerRaws::-webkit-scrollbar{ width: 10px; }
+#containerRaws::-webkit-scrollbar-thumb{
+  background: rgba(255,255,255,.14);
+  border-radius: 999px;
 }

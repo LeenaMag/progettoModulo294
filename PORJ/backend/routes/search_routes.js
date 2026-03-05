@@ -14,7 +14,7 @@
  *           type: string
  */
 import express from 'express'
-import { findItemsByTagId, findItemsByName, getAllTags } from '../utils/search_utils.js'
+import { findItemsByTagId, findItemsByName, getAllTags, getTag } from '../utils/search_utils.js'
 import { isAuthenticated } from '../utils/user_utils.js'
 
 const router = express.Router()
@@ -141,6 +141,22 @@ router.get('/name/:name/:nr',  async (req, res) => {
     res.end(JSON.stringify(items.slice((nr-1)*30, Math.min(nr*30 -1, (items.length-1)))))
   } catch (error) {
     console.error(error)
+  }
+})
+
+router.get('/tag/:id',  async (req, res) =>{
+  try {
+    const tagId = req.params.id
+    const tag = await getTag(tagId)
+    if (!tag) {
+      res.status(404).json({ error: "Tag not found" });
+      return;
+    }
+
+    res.status(200).json(tag);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server error" });
   }
 })
 
