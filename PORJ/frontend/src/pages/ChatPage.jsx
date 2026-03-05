@@ -36,8 +36,8 @@ export default function ChatPage() {
 }
 
 export async function loader({ params }) {
-    let user = await fetch(`http://localhost:3000/user/userId/${params.id}`)
-    let chat = await fetch(`http://localhost:3000/user/chatMessages/${params.id}`)
+    let user = await fetch(`http://localhost:3000/user/userId/${params.ownerId}`)
+    let chat = await fetch(`http://localhost:3000/user/chatMessages/${params.ownerId}`)
 
     if (!user.ok && !chat.ok) {
         throw new Error('Could not fetch items');
