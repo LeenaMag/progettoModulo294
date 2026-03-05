@@ -23,7 +23,7 @@ export default function AddItemPage() {
         submitData.append('prod_creatore', 1);
 
         try {
-            await fetch('http://127.0.0.1:3000/items/items', {
+            await fetch('http://localhost:3000/Items/items', {
                 method: 'POST',
                 credentials: 'include',
                 body: submitData
@@ -43,8 +43,8 @@ export default function AddItemPage() {
                 <h2>Aggiungi Prodotto</h2>
                 <div className='prewiewOwner'>
                     <PrewiewOwner user ={{
-                        foto: user?.foto || "#",
-                        nome: user?.username || "Utente"
+                        foto: user.foto ,
+                        nome: user.username 
                     }}/>
                 </div>
                 
@@ -57,10 +57,10 @@ export default function AddItemPage() {
                         <div className='colR'>
                             <input type="text" name="name" placeholder="Nome del prodotto" required className='nome' />
 
-                            <input type="number" name="fk_tag" placeholder="Prezzo (CHF)" step="0.05" required className='prezzo'/>
+                            <input type="number" name="price" placeholder="Prezzo (CHF)" step="0.05" required className='prezzo'/>
 
                             
-                            <select name="prod_tipologia" required className='tag'>
+                            <select name="fk_tag" required className='tag'>
                                 {tags && tags.map((tipo) => (
                                     <option key={tipo.id} value={tipo.id}>
                                     {tipo.nome}
@@ -79,7 +79,7 @@ export default function AddItemPage() {
 
 export async function loader() {
    // const { username } = useContext(AuthContext);
-    const response = await fetch('http://127.0.0.1:3000/search/tags');
+    const response = await fetch('http://localhost:3000/search/tags');
     //const res2 = await fetch (`http://127.0.0.1:3005/user/${username}`);
     if (!response.ok) {
         throw new Error('Impossibile caricare le tipologie');
