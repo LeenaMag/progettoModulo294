@@ -122,7 +122,7 @@ router.get('/items/:nr', async (req, res) => {
  *       500:
  *         description: Errore interno del server
  */
-router.get('/items/:itemId', async (req, res) => {
+router.get('/itemsId/:itemId', async (req, res) => {
   try {
     const itemId = req.params.itemId
     res.statusCode = 200
@@ -309,7 +309,7 @@ router.post('/items/favorites', isAuthenticated, async (req, res) => {
       return res.end(JSON.stringify({ error: 'Oggetto inesistente' }))
     }
     const checkFavorite = await isItemInFavorites(userId, itemId)
-    if (checkFavorite.lenght > 0) {
+    if (checkFavorite.length === 0) {
       res.statusCode = 204
       res.setHeader('Content-Type', 'application/json')
       return res.end(JSON.stringify({ error: 'Oggetto già presente fra i preferiti' }))
@@ -348,7 +348,7 @@ router.delete('/items/favorites/:itemId', isAuthenticated, async (req, res) => {
       return res.end(JSON.stringify({ error: 'Oggetto inesistente' }))
     }
     const checkFavorite = await isItemInFavorites(userId, itemId)
-    if (checkFavorite.lenght === 0) {
+    if (checkFavorite.length === 0) {
       res.statusCode = 400
       res.setHeader('Content-Type', 'application/json')
       return res.end(JSON.stringify({ error: 'Oggetto non presente fra i preferiti' }))
@@ -623,7 +623,7 @@ router.patch('/items/update', isAuthenticated, async (req, res) => {
 
     //const item = await getItemById(itemId)
 
-    if (item.lenght > 0) {
+    if (item.length > 0) {
       res.statusCode = 401
       res.setHeader('Content-Type', 'application/json')
       return res.end(JSON.stringify({ error: 'Oggetto inesistente' }))
@@ -656,6 +656,30 @@ router.patch('/items/update', isAuthenticated, async (req, res) => {
     res.end(JSON.stringify({ error: err }))
   }
 })*/
+
+/*
+router.post('/items/auction/createAuction', isAuthenticated, async (req, res) => {
+  try {
+    const userId = req.session.user.id;
+    const { itemId, dataI, minPrice, dataF } = req.body;
+
+    const item = await getItemById(itemId);
+
+    if (!item) {
+      return res.status(404).json({ error: 'Oggetto inesistente' });
+    }
+
+    if (item.fk_utente !== userId) {
+      return res.status(403).json({ error: 'Non sei il proprietario dell’oggetto' });
+    }
+
+    await newAuction(itemId, dataI, minPrice, dataF);
+    return res.status(200).end();
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: String(err) });
+  }
+});*/
 
 router.post('/items/auction/createAuction', isAuthenticated, async (req, res) => {
   try {
@@ -722,7 +746,7 @@ router.get(`/items/auction/:auctionId`,async(req, res)=>{
  *   
  * 
  */
-router.post('/items/auction/newOffer', isAuthenticated, async(req, res) => {
+/*router.post('/items/auction/newOffer', isAuthenticated, async(req, res) => {
   try {
     const userId = req.session.user.id
     const { auctionId, price } = req.body
@@ -731,7 +755,7 @@ router.post('/items/auction/newOffer', isAuthenticated, async(req, res) => {
     const auction = await infoAuction(auctionId)
 
 
-    if (auction.lenght > 0 || auction.dataF) {
+    if (auction.length > 0 || auction.dataF) {
       res.statusCode = 401
       res.setHeader('Content-Type', 'application/json')
       return res.end(JSON.stringify({ error: 'Asta ineistente' }))
@@ -788,6 +812,80 @@ router.post('/items/auction/newOffer', isAuthenticated, async(req, res) => {
     res.setHeader('Content-Type', 'application/json')
     res.end(JSON.stringify({ error: err }))
   }
-})
+})*/
+
+router.post('/items/auction/newOffer', isAuthenticated, async (req, res) => {
+  try {
+    const userId = req.session.user.id;
+    const { auctionId, price } = req.body;
+
+    const auction = await infoAuction(auctionId);
+
+    if (!auction) {
+      return res.status(404).json({ error: 'Asta inesistente' });
+    }
+
+    if (!auction.aperta) {
+      return res.status(400).json({ error: 'Asta chiusa' });
+    }
+
+    // prezzo minimo: deve essere price >= minPrezzo (non il contrario)
+    if (Number(price) < Number(auction.minPrezzo)) {
+      return res.status(400).json({ error: 'Offerta sotto il prezzo minimo' });
+    }
+
+    // prendo l’offerta vincente attuale (se esiste)
+    const currentWinning =
+      auction.fk_offerta === null ? null : await infoOffer(auction.fk_offerta);
+
+    if (currentWinning && Number(price) <= Number(currentWinning.valore)) {
+      return res.status(400).json({ error: "Valore dell'offerta insufficiente" });
+    }
+
+    // inserisco nuova offerta
+    const insert = await newOffer(userId, auctionId, price);
+
+    // imposto subito come vincente (più affidabile di findOffer)
+    await changeWinningOffer(insert.insertId, auctionId);
+
+    // se vuoi estendere l'asta quando è scaduta, fallo correttamente
+    // (altrimenti puoi rimuovere questo blocco)
+    const end = (auction.dataF ? auction.dataF : null);
+
+    // parsing semplice compatibile con "YYYY.MM.DD HH:MM" o "YYYY-MM-DD HH:MM"
+    const parse = (str) => {
+      if (!str) return null;
+      const [dp, tp] = str.split(" ");
+      if (!dp || !tp) return null;
+      const sep = dp.includes(".") ? "." : "-";
+      const [y, m, d] = dp.split(sep).map(Number);
+      const [hh, mm] = tp.split(":").map(Number);
+      if (![y, m, d, hh, mm].every(n => Number.isFinite(n))) return null;
+      return new Date(y, m - 1, d, hh, mm, 0);
+    };
+
+    const endDate = parse(end);
+    const now = new Date();
+
+    // se scaduta, la sposto a now + 1h (coerente e senza getDay())
+    if (endDate && endDate <= now) {
+      const newEnd = new Date(now.getTime() + 60 * 60 * 1000);
+
+      const yyyy = newEnd.getFullYear();
+      const mm = String(newEnd.getMonth() + 1).padStart(2, "0");
+      const dd = String(newEnd.getDate()).padStart(2, "0");
+      const HH = String(newEnd.getHours()).padStart(2, "0");
+      const MM = String(newEnd.getMinutes()).padStart(2, "0");
+
+      const formatted = `${yyyy}.${mm}.${dd} ${HH}:${MM}`;
+      await setNewTime(auction.id, formatted);
+    }
+
+    return res.status(200).end();
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: String(err) });
+  }
+});
 
 export { router }
