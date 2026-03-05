@@ -1,13 +1,19 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import SearchBar from "../components/searchBar";
-import { useNavigate, useLoaderData } from 'react-router-dom';
+import { useNavigate, useLoaderData, Link } from 'react-router-dom';
 import './AddIteamPage.css';
 import PrewiewOwner from '../components/PrewiewOwner';
+import { AuthContext } from '../context/AuthContext';
 
 
 export default function AddItemPage() {
     const navigate = useNavigate();
     const tags = useLoaderData();
+    const { user } = useContext(AuthContext);
+
+    if (!user) {
+        return <div>Devi fare il login</div>;
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -37,8 +43,8 @@ export default function AddItemPage() {
                 <h2>Aggiungi Prodotto</h2>
                 <div className='prewiewOwner'>
                     <PrewiewOwner user ={{
-                        foto: "#",
-                        nome: "Mario Rossi"
+                        foto: user?.foto || "#",
+                        nome: user?.username || "Utente"
                     }}/>
                 </div>
                 

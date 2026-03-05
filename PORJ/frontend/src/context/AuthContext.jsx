@@ -16,7 +16,7 @@ export const AuthProvider = ({ children }) => {
                 const data = await response.json();
 
                 if (data.loggedIn) {
-                    setUser({ username: data.user });
+                    setUser({ username: data.username, foto: data.foto });
                 }
             } catch (err) {
                 console.error("Errore checkAuth:", err);
@@ -39,16 +39,28 @@ export const AuthProvider = ({ children }) => {
         }
 
         const data = await response.json();
-        setUser({ username: data.user });
+        setUser({ username: data.username, foto: data.foto});
         return data;
     };
 
-    const logout = async () => {
+    /*const logout = async () => {
         await fetch('http://127.0.0.1:3000/user/logout', {
             credentials: 'include'
         });
         setUser(null);
-    };
+    };*/
+
+    const logout = async () => {
+    try {
+        await fetch('http://127.0.0.1:3000/user/logout', {
+            credentials: 'include'
+        });
+    } catch (err) {
+        console.error("Errore logout:", err);
+    } finally {
+        setUser(null);
+    }
+};
 
     return (
         <AuthContext.Provider value={{ user, login, logout, isLoading }}>

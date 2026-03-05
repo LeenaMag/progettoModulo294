@@ -57,7 +57,7 @@ export async function checkChatExist(userId1, userId2) {
 }
 
 export async function getAuthUserByUsername(username) {
-  const [users] = await con.query(`SELECT username, pswd, salt, id FROM utente WHERE username = ?`, [username])
+  const [users] = await con.query(`SELECT* FROM utente WHERE username = ?`, [username])
   return users[0]
 }
 

@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import {  Link } from 'react-router-dom';
+import {  Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import './AuthPages.css';
 
@@ -8,6 +8,8 @@ export default function Singup() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        const submitData = new FormData(e.target);
         
         try {
             await fetch('http://127.0.0.1:3000/User/signup', {
@@ -15,7 +17,7 @@ export default function Singup() {
                 credentials: 'include',
                 body: submitData
             });
-            navigate('/');
+            navigate('/login');
         } catch (err) {
             console.error("Errore:", err);
             alert("Errore durante l'inserimento!");

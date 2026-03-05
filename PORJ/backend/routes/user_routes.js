@@ -49,9 +49,21 @@ import {
 } from '../utils/user_utils.js'
 import bcrypt from 'bcryptjs';
 import multer from 'multer'
+import path from 'path';
 
-const upload = multer({ dest: 'uploads/users' });
+//const upload = multer({ dest: 'uploads/users' });
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/users");
+  },
+  filename: (req, file, cb) => {
+    const ext = path.extname(file.originalname); // keeps .jpg / .png
+    const fileName = crypto.randomBytes(16).toString("hex") + ext;
+    cb(null, fileName);
+  }
+});
 
+const upload = multer({ storage });
 
 const router = express.Router()
 
@@ -110,7 +122,8 @@ router.post('/signup', upload.single('prod_img') , async (req, res) => {
     }
 
     const createdUser = await createUser(
-      `http://127.0.0.1:${process.env.SERVER_PORT}/uploads/users/${req.file.filename}`,
+      //`http://127.0.0.1:${process.env.SERVER_PORT}/uploads/users/${req.file.filename}`,
+      `http://127.0.0.1:${process.env.BACKEND_PORT}/uploads/users/${req.file.filename}`,
       firstName,
       lastName,
       username,
@@ -242,7 +255,6 @@ router.get('/login/:username/:password', async (req, res) => {
       res.setHeader('Content-Type', 'application/json')
       return res.end(JSON.stringify({ error: 'Credenziali inserite errate' }))
     }
-
     req.session.user = authUser
     req.session.save(() => {
       res.statusCode = 200
@@ -251,7 +263,9 @@ router.get('/login/:username/:password', async (req, res) => {
         JSON.stringify({
           sessionId: req.session.id,
           username: req.session.user.username,
-          userId: req.session.user.id
+          userId: req.session.user.id,
+          foto: req.session.user.foto
+
         })
       )
     })
@@ -347,7 +361,10 @@ router.get('/user/:username',  async (req, res) => {
 
     const userProfile = {
       id: user.id,
+      name: user.nome,
+      surname: user.cognome,
       username: user.username,
+      foto: user.foto,
       itemsForSale: await getItemsForSaleByUserId(user.id)
     }
 
@@ -551,24 +568,14 @@ router.post('/chats', isAuthenticated, async (req, res) => {
   }
 })
 
-router.post('/addValutation/:nota/:userId', isAuthenticated, async (req, res) => {
-  try {
-    const nota = req.params.nota
-    const userId = req.params.userId
-    const valutazione = addValutation(nota, userId)
-    res.setHeader('Content-Type', 'application/json')
-    res.status(200)
-    res.end(JSON.stringify(valutazione))
-  } catch (error) {
-    console.error(error)
-  }
-})
+
 
 
 
 router.get("/checkAuth", (req, res) => {
     if (req.session.user) {
-        res.status(200).json({ loggedIn: true, user: req.session.user.username });
+        res.status(200).json({ loggedIn: true, username: req.session.user.username, foto: req.session.user.foto });
+        console.log("SESSION USER:", req.session.user);
     } else {
         res.status(200).json({ loggedIn: false });
     }

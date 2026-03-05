@@ -6,7 +6,7 @@ import { loader as tagsloader } from './pages/AddIteamPage.jsx'
 import HomePage from './pages/HomePage.jsx'
 import LoginPage from './pages/LoginPage.jsx'
 import { AuthProvider } from './context/AuthContext.jsx'
-import Singup from './pages/singup.jsx'
+import Singup from './pages/Singup.jsx'
 // import ItemPage, { loader as itemLoader } from './pages/ItemPage.jsx'
 import AddItemPage from './pages/AddIteamPage.jsx'
 
@@ -20,7 +20,7 @@ const router = createBrowserRouter([{
     { path: "/:ricerca", element: <HomePage />, loader: itemsLoader },
     { path: "/addItem", element: <AddItemPage />, loader: tagsloader },
     { path: "/login", element: <LoginPage /> },
-    { path: "/singup", element: <Singup /> },
+    { path: "/Singup", element: <Singup /> },
     // { path: "addItem", element: <AddItemPage /> }
   ]
 }])

@@ -3,6 +3,7 @@ import swaggerJSDoc from 'swagger-jsdoc'
 import swaggerUi from 'swagger-ui-express'
 import session from 'express-session'
 import cors from 'cors'
+import path from "path";
 //import expressLayouts from 'express-ejs-layouts'
 
 import { router as ItemRouter } from './routes/item_routes.js'
@@ -75,7 +76,7 @@ setInterval(async () => {
 app.use(session({
     secret: process.env.SECRET,
     resave: false,
-    saveUninotialized: false,
+    saveUninitialized: false,
     cookie: {
         maxAge: 1000 * 60 * 60 * 3//tre ore
     }
@@ -93,7 +94,8 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 
 const spaces = swaggerJSDoc(option)
-
+const __dirname = import.meta.dirname;
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use("/Items", ItemRouter)
 app.use("/user", UserRouter)
 app.use("/search", SearchRouter)
