@@ -51,8 +51,8 @@ import bcrypt from 'bcryptjs';
 import multer from 'multer'
 import path from 'path';
 
-//const upload = multer({ dest: 'uploads/users' });
-const storage = multer.diskStorage({
+const upload = multer({ dest: 'uploads/users' });
+/*const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "uploads/users");
   },
@@ -63,7 +63,7 @@ const storage = multer.diskStorage({
   }
 });
 
-const upload = multer({ storage });
+const upload = multer({ storage });*/
 
 const router = express.Router()
 

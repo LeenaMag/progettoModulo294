@@ -50,7 +50,7 @@ import {
 } from '../utils/item_utils.js'
 import multer from 'multer'
 import { isAuthenticated, createChat, checkChatExist } from '../utils/user_utils.js'
-const upload = multer({ dest: 'uploads/' });
+const upload = multer({ dest: 'uploads/items' });
 
 const router = express.Router()
 
@@ -220,7 +220,7 @@ router.post('/items', isAuthenticated,  upload.single('prod_img'), async (req, r
     }
 
     const userId = req.session.user.id
-    const picture = `http://127.0.0.1:${process.env.SERVER_PORT}/uploads/items/${req.file.filename}`
+    const picture = `http://127.0.0.1:${process.env.BACKEND_PORT}/uploads/items/${req.file.filename}`
     const now = new Date()
     const formattedDate = now.getFullYear() +
       '-' +

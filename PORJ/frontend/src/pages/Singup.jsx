@@ -12,7 +12,7 @@ export default function Singup() {
         const submitData = new FormData(e.target);
         
         try {
-            await fetch('http://127.0.0.1:3000/User/signup', {
+            await fetch('http://localhost:3000/User/signup', {
                 method: 'POST',
                 credentials: 'include',
                 body: submitData
