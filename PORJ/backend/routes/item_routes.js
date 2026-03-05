@@ -46,7 +46,8 @@ import {
   addTimeAuction,
   changeWinningOffer,
   findOffer,
-  setNewTime
+  setNewTime,
+  getOpenAuctionsRich
 } from '../utils/item_utils.js'
 import multer from 'multer'
 import { isAuthenticated, createChat, checkChatExist } from '../utils/user_utils.js'
@@ -703,6 +704,18 @@ router.post('/items/auction/createAuction', isAuthenticated, async (req, res) =>
   }
 });
 
+
+router.get('/items/auction/open', async (req, res) => {
+  try {
+    const rows = await getOpenAuctionsRich();
+    return res.status(200).json(rows);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: String(err) });
+  }
+});
+
+
 /**
  * @swagger
  * /items/auction/:id:
@@ -887,14 +900,6 @@ router.post('/items/auction/newOffer', isAuthenticated, async (req, res) => {
   }
 });
 
-import { getOpenAuctionsRich } from '../utils/item_utils.js';
 
-router.get('/items/auction/open', async (req, res) => {
-  try {
-    res.status(200).json(await getOpenAuctionsRich());
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: String(err) });
-  }
-});
+
 export { router }
