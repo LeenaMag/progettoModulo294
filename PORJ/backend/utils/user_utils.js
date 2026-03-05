@@ -23,8 +23,8 @@ export async function getUserByUsername(username) {
   return users[0]
 }
 
-export async function getUserById(username) {
-  const [users] = await con.query(`SELECT * FROM utente WHERE username=?`, username)
+export async function getUserById(id) {
+  const [users] = await con.query(`SELECT * FROM utente WHERE id=?`, id)
   return users[0]
 }
 
