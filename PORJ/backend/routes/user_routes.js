@@ -45,12 +45,11 @@ import {
   updateUserById,
   createChat,
   checkChatExist,
-  addValutation,
-  getUserById
+  getUserById,
+  getChatByUsers
 } from '../utils/user_utils.js'
 import bcrypt from 'bcryptjs';
 import multer from 'multer'
-import path from 'path';
 
 const upload = multer({ dest: 'uploads/users' });
 /*const storage = multer.diskStorage({
@@ -99,7 +98,7 @@ const router = express.Router()
  *                 errore:
  *                   type: string
  */
-router.post('/signup', upload.single('prod_img') , async (req, res) => {
+router.post('/signup', upload.single('prod_img'), async (req, res) => {
   try {
     const { username, password, firstName, lastName } = req.body
 
@@ -349,7 +348,7 @@ router.get('/logout', isAuthenticated, async (req, res) => {
  *       500:
  *         description: Errore interno del server
  */
-router.get('/user/:username',  async (req, res) => {
+router.get('/user/:username', async (req, res) => {
   try {
     const username = req.params.username
     const user = await getUserByUsername(username)
@@ -443,7 +442,7 @@ router.get('/chats', isAuthenticated, async (req, res) => {
  *                     type: integer
  *       500:
  *         description: Errore interno del server
- */
+*/
 router.get('/messages/:chatId', isAuthenticated, async (req, res) => {
   try {
     const chatId = req.params.chatId
@@ -484,7 +483,7 @@ router.get('/messages/:chatId', isAuthenticated, async (req, res) => {
  *         description: Messaggo inviato
  *       500:
  *         description: Errore interno del server
- */
+*/
 router.post('/messages', isAuthenticated, async (req, res) => {
   try {
     const userId = req.session.user.id
@@ -574,16 +573,16 @@ router.post('/chats', isAuthenticated, async (req, res) => {
 
 
 router.get("/checkAuth", (req, res) => {
-    if (req.session.user) {
-        res.status(200).json({ loggedIn: true, username: req.session.user.username, foto: req.session.user.foto });
-        console.log("SESSION USER:", req.session.user);
-    } else {
-        res.status(200).json({ loggedIn: false });
-    }
+  if (req.session.user) {
+    res.status(200).json({ loggedIn: true, username: req.session.user.username, foto: req.session.user.foto });
+    console.log("SESSION USER:", req.session.user);
+  } else {
+    res.status(200).json({ loggedIn: false });
+  }
 });
 
 
-router.get('/userId/:id',  async (req, res) => {
+router.get('/userId/:id', async (req, res) => {
   try {
     const id = req.params.id
     const user = await getUserById(id)
@@ -610,5 +609,30 @@ router.get('/userId/:id',  async (req, res) => {
   }
 })
 
+router.get('/chatMessages/:user1', isAuthenticated, async (req, res) => {
+  try {
+    const user1 = req.params.user1
+    const user2 = req.session.user.id
+
+    let chatId = await getChatByUsers(user1, user2)
+    if(chatId.length == 0){
+      const chat = await createChat(user1, user2)
+      chatId = await getChatByUsers(user1, user2)
+    }
+    
+    const messages = await getMessagesByChatId(chatId.id)
+
+    if (messages === undefined) {
+      res.statusCode = 401
+      res.setHeader('Content-Type', 'application/json')
+      return res.end(JSON.stringify({ error: 'Chat inesisistente e impossibile crearla' }))
+    }
+
+    res.setHeader('Content-Type', 'application/json')
+    res.end(JSON.stringify(messages))
+  } catch (error) {
+    console.error(error)
+  }
+})
 
 export { router }

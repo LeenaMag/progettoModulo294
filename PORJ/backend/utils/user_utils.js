@@ -46,6 +46,15 @@ export async function getChatByUserIdAndChatId(userId, chatId) {
   return chats[0]
 }
 
+export async function getChatByUsers(userId1, userId2) {
+  const [chats] = await con.query(
+    `SELECT * FROM chat WHERE ((fk_utente1=? AND fk_utente2=?) OR (fk_utente1=? AND fk_utente2=?))`,
+    [userId1, userId2, userId2, userId1]
+  )
+  return chats[0]
+}
+
+
 export async function getItemsForSaleByUserId(userId) {
   const [items] = await con.query(`SELECT * FROM oggetto WHERE fk_utente=?`, userId)
   return items
