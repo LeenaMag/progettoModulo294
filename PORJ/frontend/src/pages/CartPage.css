@@ -1,0 +1,95 @@
+/* ---------- differenziazione evidente ---------- */
+
+.chatMsgRow.mine{
+  justify-content: flex-end;
+}
+
+.chatMsgRow.theirs{
+  justify-content: flex-start;
+}
+
+/* bubble base */
+.chatBubble{
+  max-width: min(72%, 640px);
+  padding: 10px 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.18);
+  position: relative;
+}
+
+/* MIEI: più “azzurro”, bordo diverso */
+.chatMsgRow.mine .chatBubble{
+  background: rgba(45,212,255,.14);
+  border-color: rgba(45,212,255,.32);
+}
+
+/* ALTRI: più “grigio” */
+.chatMsgRow.theirs .chatBubble{
+  background: rgba(255,255,255,.06);
+  border-color: rgba(255,255,255,.12);
+}
+
+/* coda (tail) stile chat */
+.chatMsgRow.mine .chatBubble::after{
+  content: "";
+  position: absolute;
+  right: -6px;
+  bottom: 10px;
+  width: 12px;
+  height: 12px;
+  transform: rotate(45deg);
+  background: rgba(45,212,255,.14);
+  border-right: 1px solid rgba(45,212,255,.32);
+  border-bottom: 1px solid rgba(45,212,255,.32);
+}
+
+.chatMsgRow.theirs .chatBubble::after{
+  content: "";
+  position: absolute;
+  left: -6px;
+  bottom: 10px;
+  width: 12px;
+  height: 12px;
+  transform: rotate(45deg);
+  background: rgba(255,255,255,.06);
+  border-left: 1px solid rgba(255,255,255,.12);
+  border-bottom: 1px solid rgba(255,255,255,.12);
+}
+
+/* testo */
+.chatMsgText{
+  color: rgba(255,255,255,.94);
+  font-weight: 750;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* meta: più chiaro sui miei */
+.chatMsgMeta{
+  margin-top: 6px;
+  font-size: 12px;
+  color: rgba(255,255,255,.55);
+  font-weight: 700;
+  text-align: right;
+}
+
+.chatMsgRow.mine .chatMsgMeta{
+  color: rgba(255,255,255,.62);
+}
+
+/* (facoltativo) piccolo label sopra la bubble */
+.chatMsgAuthor{
+  font-size: 12px;
+  font-weight: 900;
+  opacity: .75;
+  margin-bottom: 6px;
+}
+
+.chatMsgRow.mine .chatMsgAuthor{
+  text-align: right;
+}
+
+.chatMsgRow.theirs .chatMsgAuthor{
+  text-align: left;
+}

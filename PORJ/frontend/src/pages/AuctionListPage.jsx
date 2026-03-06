@@ -55,7 +55,23 @@ function normalizeAuctionRich(raw) {
     dataF: a.dataF ?? a.endDate ?? null,
   };
 }
+const BACKEND_BASE = import.meta.env.VITE_BACKEND_URL ?? 'http://localhost:3000';
 
+function resolveItemImageUrl(foto) {
+  if (!foto) return null;
+
+  // già URL completo
+  if (foto.startsWith('http://') || foto.startsWith('https://')) return foto;
+
+  // path assoluto tipo /uploads/items/xxx
+  if (foto.startsWith('/')) return `${BACKEND_BASE}${foto}`;
+
+  // path relativo tipo uploads/items/xxx
+  if (foto.startsWith('uploads/')) return `${BACKEND_BASE}/${foto}`;
+
+  // solo filename (hash)
+  return `${BACKEND_BASE}/uploads/items/${foto}`;
+}
 function AuctionCard({ auction }) {
   const a = normalizeAuctionRich(auction);
   const timeLeft = formatTimeLeft(a.dataF);
@@ -71,6 +87,7 @@ function AuctionCard({ auction }) {
         : '/';
 
   const isOpen = a.aperta == null ? null : Boolean(a.aperta);
+
 
   return (
     <Link className="auction-link" to={to} aria-label={`Apri asta: ${a.nome}`}>

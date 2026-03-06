@@ -13,8 +13,15 @@ import AddItemPage from './pages/AddIteamPage.jsx'
 import InfoIteam from './pages/InfoIteamPage.jsx'
 import ChatPage, {loader as chatLoader} from './pages/ChatPage.jsx'
 import AuctionListPage, { loader as auctionsLoader } from './pages/AuctionListPage.jsx';
-
-
+import AuctionDetailPage, { loader as auctionDetailLoader } from './pages/AuctionDetailPage.jsx';
+import CartPage, { loader as cartLoader } from './pages/CartPage.jsx';
+import FavoritesPage, { loader as favoritesLoader } from './pages/FavoritesPage.jsx';
+import UserSettingsPage, { loader as settingsLoader } from './pages/UserSettingsPage.jsx';
+import UserProfilePage, { loader as userProfileLoader } from './pages/UserProfilePage.jsx';
+import CreateAuctionPage, { loader as createAuctionLoader } from './pages/CreateAuctionPage.jsx';
+import NotificationsPage, { loader as notificationsLoader } from './pages/NotificationsPage.jsx';
+import ChatsListPage, { loader as chatsListLoader } from './pages/ChatsListPage.jsx';
+import TagSearchPage, { loader as tagSearchLoader } from './pages/TagSearchPage.jsx';
 
 const router = createBrowserRouter([{
   path: "/",
@@ -32,6 +39,16 @@ const router = createBrowserRouter([{
     { path: "/chat/:ownerId", element: <ChatPage />, loader: chatLoader },
     { path: "/auctions", element: <AuctionListPage />, loader: auctionsLoader },
     { path: "/auctions/:ricerca", element: <AuctionListPage />, loader: auctionsLoader },
+    { path: "/auction/:auctionId", element: <AuctionDetailPage />, loader: auctionDetailLoader },
+    { path: "/catalogo", element: <CartPage />, loader: cartLoader },
+    { path: "/preferiti", element: <FavoritesPage />, loader: favoritesLoader },
+    { path: "/impostazioni", element: <UserSettingsPage />, loader: settingsLoader },
+    { path: "/user/:username", element: <UserProfilePage />, loader: userProfileLoader },
+    { path: "/aste/crea", element: <CreateAuctionPage />, loader: createAuctionLoader },
+    { path: "/notifiche", element: <NotificationsPage />, loader: notificationsLoader },
+    { path: "/chats", element: <ChatsListPage />, loader: chatsListLoader },
+    { path: "/tag", element: <TagSearchPage />, loader: tagSearchLoader },
+    { path: "/tag/:tagName", element: <TagSearchPage />, loader: tagSearchLoader },
     //{ path: "/infoIteam", element: <InfoIteam />, loader: iteamLoader },
     // { path: "addItem", element: <AddItemPage /> }
   ]

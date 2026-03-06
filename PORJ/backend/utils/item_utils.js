@@ -166,7 +166,7 @@ export async function addTimeAuction(auctionId, time){
 
 export async function newAuction(itemId, dataI, minPrice, dataF) {
   const [result] = await con.query(
-    `INSERT INTO asta (fk_oggetto, dataI, dataF, minPrezzo) VALUES (?, ?, ?, ?)`,
+    `INSERT INTO asta (fk_oggetto, dataI, dataF, minPrezzo, aperta) VALUES (?, ?, ?, ?, true)`,
     [itemId, dataI, dataF, minPrice]
   );
   return result;
@@ -294,6 +294,8 @@ export async function checkExpiredAuctions() {
   }
 }
 
+
+
 export async function getOpenAuctionsRich() {
   const [rows] = await con.query(`
     SELECT 
@@ -308,5 +310,78 @@ export async function getOpenAuctionsRich() {
     WHERE a.aperta = true
     ORDER BY a.dataF ASC
   `);
+  return rows;
+}
+
+export async function getAuctionDetailRich(auctionId) {
+  const [rows] = await con.query(
+    `
+    SELECT 
+      a.*,
+      o.id           AS itemId,
+      o.nome         AS itemNome,
+      o.foto         AS itemFoto,
+      o.descrizione  AS itemDescrizione,
+      o.fk_utente    AS ownerId,
+      owner.username AS ownerUsername,
+      owner.foto     AS ownerFoto,
+
+      win.id         AS winningOfferId,
+      win.valore     AS currentPrice,
+      winner.username AS winnerUsername,
+      winner.foto     AS winnerFoto
+    FROM asta a
+    JOIN oggetto o ON o.id = a.fk_oggetto
+    JOIN utente owner ON owner.id = o.fk_utente
+    LEFT JOIN offerta win ON win.id = a.fk_offerta
+    LEFT JOIN utente winner ON winner.id = win.fk_utente
+    WHERE a.id = ?
+    LIMIT 1
+    `,
+    [auctionId]
+  );
+
+  return rows[0] ?? null;
+}
+
+export async function getOffersByAuctionId(auctionId, limit = 10) {
+  const [rows] = await con.query(
+    `
+    SELECT 
+      off.id,
+      off.valore,
+      off.fk_utente,
+      off.fk_asta,
+      u.username,
+      u.foto
+    FROM offerta off
+    JOIN utente u ON u.id = off.fk_utente
+    WHERE off.fk_asta = ?
+    ORDER BY off.id DESC
+    LIMIT ?
+    `,
+    [auctionId, Number(limit)]
+  );
+
+  return rows;
+}
+
+export async function getAuctionsByOwnerIdRich(ownerId) {
+  const [rows] = await con.query(
+    `
+    SELECT 
+      a.*,
+      o.id   AS itemId,
+      o.nome AS itemNome,
+      o.foto AS itemFoto,
+      win.valore AS currentPrice
+    FROM asta a
+    JOIN oggetto o ON o.id = a.fk_oggetto
+    LEFT JOIN offerta win ON win.id = a.fk_offerta
+    WHERE o.fk_utente = ?
+    ORDER BY a.dataF DESC
+    `,
+    [ownerId]
+  );
   return rows;
 }

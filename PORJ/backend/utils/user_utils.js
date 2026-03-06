@@ -120,3 +120,79 @@ export async function addValutation(nota, userId){
   const result = (await con.query('UPDATE utente SET affidabilita =? WHERE id=?',[nota, userId]))[0]
   return result
 }
+
+export async function validateUserCredentialsForUpdate(userId, username, password, firstName, lastName, res) {
+  if (!username || !password || !firstName || !lastName) {
+    res.statusCode = 401;
+    res.setHeader('Content-Type', 'application/json');
+    return res.end(JSON.stringify({ error: 'Campi mancanti' }));
+  }
+
+  if (username.split('').includes('/')) {
+    res.statusCode = 415;
+    res.setHeader('Content-Type', 'application/json');
+    return res.end(JSON.stringify({ error: '/ in username is not allowed' }));
+  }
+
+  // ✅ username già usato da un ALTRO utente
+  const [rows] = await con.query(`SELECT id FROM utente WHERE username=? AND id<>?`, [username, userId]);
+  if (rows.length > 0) {
+    res.statusCode = 401;
+    res.setHeader('Content-Type', 'application/json');
+    return res.end(JSON.stringify({ error: 'Username gia presente' }));
+  }
+
+  const passwordSalt = bcrypt.genSaltSync(10);
+  const passwordHash = bcrypt.hashSync(password, passwordSalt);
+
+  return { username, hash: passwordHash, salt: passwordSalt };
+}
+
+export async function deleteUserAccount(userId) {
+  // 1) offerte fatte da questo utente (anche su aste di altri)
+  const [offers] = await con.query(`SELECT id FROM offerta WHERE fk_utente=?`, [userId]);
+  const offerIds = offers.map((r) => r.id);
+
+  // ✅ stacco le offerte "vincenti" dalle aste, così non c'è più FK che blocca
+  if (offerIds.length) {
+    await con.query(`UPDATE asta SET fk_offerta=NULL WHERE fk_offerta IN (?)`, [offerIds]);
+    await con.query(`DELETE FROM offerta WHERE id IN (?)`, [offerIds]);
+  }
+
+  // 2) chat
+  const [chats] = await con.query(`SELECT id FROM chat WHERE fk_utente1=? OR fk_utente2=?`, [userId, userId]);
+  const chatIds = chats.map((c) => c.id);
+
+  if (chatIds.length) {
+    await con.query(`DELETE FROM messaggio WHERE fk_chat IN (?)`, [chatIds]);
+    await con.query(`DELETE FROM chat WHERE id IN (?)`, [chatIds]);
+  }
+
+  // 3) carrello/preferiti utente
+  await con.query(`DELETE FROM carrello WHERE fk_utente=?`, [userId]);
+  await con.query(`DELETE FROM preferito WHERE fk_utente=?`, [userId]);
+
+  // 4) oggetti dell'utente + aste collegate
+  const [items] = await con.query(`SELECT id FROM oggetto WHERE fk_utente=?`, [userId]);
+  const itemIds = items.map((r) => r.id);
+
+  if (itemIds.length) {
+    // prima cancello offerte fatte SU aste dei suoi oggetti (per evitare FK offerta->asta)
+    const [auctions] = await con.query(`SELECT id FROM asta WHERE fk_oggetto IN (?)`, [itemIds]);
+    const auctionIds = auctions.map((a) => a.id);
+
+    if (auctionIds.length) {
+      // stacco eventuali fk_offerta (anche se già fatto sopra, qui copre il caso "aste sue")
+      await con.query(`UPDATE asta SET fk_offerta=NULL WHERE id IN (?)`, [auctionIds]);
+      await con.query(`DELETE FROM offerta WHERE fk_asta IN (?)`, [auctionIds]);
+      await con.query(`DELETE FROM asta WHERE id IN (?)`, [auctionIds]);
+    }
+
+    await con.query(`DELETE FROM carrello WHERE fk_oggetto IN (?)`, [itemIds]);
+    await con.query(`DELETE FROM preferito WHERE fk_oggetto IN (?)`, [itemIds]);
+    await con.query(`DELETE FROM oggetto WHERE id IN (?)`, [itemIds]);
+  }
+
+  // 5) infine l'utente
+  await con.query(`DELETE FROM utente WHERE id=?`, [userId]);
+}

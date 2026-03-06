@@ -46,10 +46,14 @@ import {
   createChat,
   checkChatExist,
   getUserById,
-  getChatByUsers
+  getChatByUsers,
+  validateUserCredentialsForUpdate,
+  deleteUserAccount,
 } from '../utils/user_utils.js'
 import bcrypt from 'bcryptjs';
 import multer from 'multer'
+import { con } from '../connection.js'
+
 
 const upload = multer({ dest: 'uploads/users' });
 /*const storage = multer.diskStorage({
@@ -167,44 +171,63 @@ router.post('/signup', upload.single('prod_img'), async (req, res) => {
  */
 router.patch('/modify', isAuthenticated, async (req, res) => {
   try {
-    const { username, password, firstName, lastName } = req.body
-  
-    const credentials = await validateUserCredentials(username, password, firstName, lastName, res)
+    const { username, password, firstName, lastName } = req.body;
 
-    if (credentials.error != undefined) {
-      res.statusCode = 401
-      res.setHeader('Content-Type', 'application/json')
-      return res.end(JSON.stringify({ error: credentials.error }))
-    }
+    const credentials = await validateUserCredentialsForUpdate(
+      req.session.user.id,
+      username,
+      password,
+      firstName,
+      lastName,
+      res
+    );
 
-    const updatedUser = await updateUserById(
+    // se validate ha già risposto con res.end, credentials potrebbe essere undefined
+    if (!credentials || credentials.error) return;
+
+    await updateUserById(
       req.session.user.id,
       firstName,
       lastName,
       credentials.username,
       credentials.hash,
       credentials.salt
-    )
+    );
 
-    req.session.user = getAuthUserByUsername(username)
+    const fresh = await getAuthUserByUsername(credentials.username);
+    req.session.user = fresh;
+
     req.session.save(() => {
-      res.statusCode = 200
-      res.setHeader('Content-Type', 'application/json')
-      res.end(
-        JSON.stringify({
-          sessionId: req.session.id,
-          username: req.session.user.username,
-          userId: req.session.user.id
-        })
-      )
-    })
+      res.status(200).json({
+        sessionId: req.session.id,
+        username: req.session.user.username,
+        userId: req.session.user.id,
+        foto: req.session.user.foto
+      });
+    });
   } catch (err) {
-    console.error(err)
-    res.statusCode = 500
-    res.setHeader('Content-Type', 'application/json')
-    res.end(JSON.stringify({ error: err }))
+    console.error(err);
+    res.status(500).json({ error: String(err) });
   }
-})
+});
+
+router.delete('/delete', isAuthenticated, async (req, res) => {
+  try {
+    await deleteUserAccount(req.session.user.id);
+
+    req.session.destroy((err) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).json({ error: String(err) });
+      }
+      res.clearCookie('connect.sid');
+      return res.status(200).json({ ok: true });
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: String(err) });
+  }
+});
 
 /**
  * @swagger
@@ -404,15 +427,49 @@ router.get('/user/:username', async (req, res) => {
  */
 router.get('/chats', isAuthenticated, async (req, res) => {
   try {
-    const userId = req.session.user.id
-    const chats = await getChatsByUserId(userId)
+    const myId = req.session.user.id;
 
-    res.setHeader('Content-Type', 'application/json')
-    res.end(JSON.stringify(chats))
-  } catch (error) {
-    console.error(error)
+    const [rows] = await con.query(
+      `
+      SELECT
+        c.id AS chatId,
+
+        -- altro partecipante (id)
+        CASE
+          WHEN c.fk_utente1 = ? THEN c.fk_utente2
+          ELSE c.fk_utente1
+        END AS otherUserId,
+
+        -- dati altro partecipante
+        u.username AS otherUsername,
+        u.foto AS otherFoto,
+
+        -- ultimo messaggio (se esiste)
+        m.testo AS lastMessage,
+        m.dataInvio  AS lastAt
+      FROM chat c
+      JOIN utente u
+        ON u.id = (CASE WHEN c.fk_utente1 = ? THEN c.fk_utente2 ELSE c.fk_utente1 END)
+      LEFT JOIN messaggio m
+        ON m.id = (
+          SELECT mm.id
+          FROM messaggio mm
+          WHERE mm.fk_chat = c.id
+          ORDER BY mm.id DESC
+          LIMIT 1
+        )
+      WHERE c.fk_utente1 = ? OR c.fk_utente2 = ?
+      ORDER BY m.id DESC
+      `,
+      [myId, myId, myId, myId]
+    );
+
+    return res.status(200).json(rows);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: String(err) });
   }
-})
+});
 
 /**
  * @swagger
@@ -509,7 +566,7 @@ router.post('/messages', isAuthenticated, async (req, res) => {
 
     const now = new Date()
     const formattedDate =
-      now.getFullYear() + +
+      now.getFullYear() +
       '-' +
       (now.getMonth() + 1) +
       '-' +
@@ -624,7 +681,7 @@ router.get('/chatMessages/:user1', isAuthenticated,async (req, res) => {
 
       const now = new Date()
       const formattedDate =
-        now.getFullYear() + +
+        now.getFullYear() +
         '-' +
         (now.getMonth() + 1) +
         '-' +

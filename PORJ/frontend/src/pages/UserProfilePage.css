@@ -1,0 +1,242 @@
+.up-wrap{
+  width: 100%;
+  max-width: 1200px;
+  margin: 18px auto 0;
+  padding: 14px 16px 26px;
+}
+
+.up-head{
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+
+  background: rgba(18,27,46,.70);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 14px;
+}
+
+.up-userBox{
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+
+.up-avatarBox{
+  width: 86px;
+  height: 86px;
+  border-radius: 999px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(0,0,0,.18);
+  flex: 0 0 auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.up-avatar{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.up-avatarPlaceholder{
+  color: rgba(255,255,255,.65);
+  font-weight: 800;
+  font-size: 12px;
+}
+
+.up-userInfo{
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.up-username{
+  font-weight: 950;
+  color: rgba(255,255,255,.92);
+  font-size: 18px;
+}
+
+.up-name{
+  color: rgba(255,255,255,.72);
+  font-weight: 800;
+}
+
+.up-actions{
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+
+.up-btn{
+  text-decoration: none;
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: rgba(18,27,46,.55);
+  color: rgba(255,255,255,.9);
+  font-weight: 900;
+}
+
+.up-tabs{
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.up-tab{
+  height: 42px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: rgba(18,27,46,.55);
+  color: rgba(255,255,255,.85);
+  font-weight: 950;
+  cursor: pointer;
+}
+
+.up-tab.active{
+  border-color: rgba(45,212,255,.35);
+  background: rgba(45,212,255,.08);
+  color: rgba(255,255,255,.95);
+}
+
+.up-list{
+  margin-top: 14px;
+}
+
+.up-rowGrid{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 12px 0;
+}
+
+.up-empty{
+  padding: 28px 16px;
+  color: rgba(255,255,255,.65);
+  text-align: center;
+}
+
+/* card */
+.up-link{
+  text-decoration: none;
+  color: inherit;
+  display: block;
+
+  flex: 1 1 calc(33.333% - 16px);
+  min-width: 240px;
+}
+
+.up-card{
+  background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  border-radius: var(--radius);
+  overflow: hidden;
+
+  min-height: 360px;
+  transition: transform .14s ease, border-color .14s ease;
+}
+
+.up-card:hover{
+  transform: translateY(-2px);
+  border-color: rgba(45,212,255,.35);
+}
+
+.up-imgBox{
+  position: relative;
+  background: rgba(255,255,255,.06);
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.up-img{
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.up-imgPlaceholder{
+  width: 100%;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255,255,255,.55);
+  background: rgba(18,27,46,.55);
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+
+.up-badge{
+  position: absolute;
+  top: 10px;
+  left: 10px;
+
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: .08em;
+
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.18);
+
+  background: rgba(0,0,0,.35);
+  backdrop-filter: blur(6px);
+}
+
+.up-badge.open{
+  color: rgba(34,197,94,.95);
+  border-color: rgba(34,197,94,.45);
+}
+
+.up-badge.closed{
+  color: rgba(251,113,133,.95);
+  border-color: rgba(251,113,133,.45);
+}
+
+.up-body{ padding: 14px; }
+
+.up-title{
+  font-weight: 950;
+  color: rgba(255,255,255,.92);
+  margin-bottom: 10px;
+  min-height: 46px;
+
+  display: flex;
+  align-items: center;
+}
+
+.up-row{
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.up-muted{
+  color: rgba(255,255,255,.62);
+  font-weight: 800;
+  font-size: 13px;
+}
+
+.up-strong{
+  color: rgba(255,255,255,.92);
+  font-weight: 900;
+  font-size: 14px;
+  text-align: right;
+}
+
+/* responsive */
+@media (max-width: 980px){
+  .up-link{ flex-basis: calc(50% - 16px); }
+}
+@media (max-width: 620px){
+  .up-link{ flex-basis: 100%; }
+}

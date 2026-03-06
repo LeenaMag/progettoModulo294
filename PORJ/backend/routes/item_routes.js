@@ -47,11 +47,17 @@ import {
   changeWinningOffer,
   findOffer,
   setNewTime,
-  getOpenAuctionsRich
+  getOpenAuctionsRich,
+  getAuctionDetailRich,
+  getOffersByAuctionId,
+  getAuctionsByOwnerIdRich,
 } from '../utils/item_utils.js'
 import multer from 'multer'
 import { isAuthenticated, createChat, checkChatExist } from '../utils/user_utils.js'
+import { extendAuctionIfSniping, closeAuctionAndNotify, getAuctionOwnerId } from '../utils/auction_utils.js';
 const upload = multer({ dest: 'uploads/items' });
+
+
 
 const router = express.Router()
 
@@ -705,6 +711,7 @@ router.post('/items/auction/createAuction', isAuthenticated, async (req, res) =>
 });
 
 
+// LISTA ASTE APERTE (ricca) -> serve per /aste
 router.get('/items/auction/open', async (req, res) => {
   try {
     const rows = await getOpenAuctionsRich();
@@ -715,7 +722,50 @@ router.get('/items/auction/open', async (req, res) => {
   }
 });
 
+// DETTAGLIO ASTA (ricco) + ultime offerte
+router.get('/items/auction/detail/:auctionId', async (req, res) => {
+  try {
+    const { auctionId } = req.params;
 
+    const auction = await getAuctionDetailRich(auctionId);
+    if (!auction) return res.status(404).json({ error: 'Asta non trovata' });
+
+    const offers = await getOffersByAuctionId(auctionId, 10);
+    return res.status(200).json({ auction, offers });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: String(err) });
+  }
+});
+
+router.get('/items/auction/user/:userId', async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    res.status(200).json(await getAuctionsByOwnerIdRich(userId));
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: String(err) });
+  }
+});
+
+router.patch('/items/auction/:auctionId/close', isAuthenticated, async (req, res) => {
+  try {
+    const { auctionId } = req.params;
+
+    const ownerId = await getAuctionOwnerId(auctionId);
+    if (!ownerId) return res.status(404).json({ error: 'Asta non trovata' });
+
+    if (req.session.user.id !== ownerId) {
+      return res.status(403).json({ error: 'Non sei il proprietario dell’asta' });
+    }
+
+    const out = await closeAuctionAndNotify(auctionId, 'MANUAL');
+    return res.status(200).json(out);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: String(err) });
+  }
+});
 /**
  * @swagger
  * /items/auction/:id:
@@ -856,6 +906,7 @@ router.post('/items/auction/newOffer', isAuthenticated, async (req, res) => {
 
     // inserisco nuova offerta
     const insert = await newOffer(userId, auctionId, price);
+    await extendAuctionIfSniping(auctionId);
 
     // imposto subito come vincente (più affidabile di findOffer)
     await changeWinningOffer(insert.insertId, auctionId);
@@ -900,6 +951,21 @@ router.post('/items/auction/newOffer', isAuthenticated, async (req, res) => {
   }
 });
 
-
+router.get('/notifications', isAuthenticated, async (req, res) => {
+  try {
+    const [rows] = await con.query(
+      `SELECT id, titolo, testo, tipo, createdAt
+       FROM notifica
+       WHERE fk_utente=?
+       ORDER BY id DESC
+       LIMIT 200`,
+      [req.session.user.id]
+    );
+    res.status(200).json(rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: String(err) });
+  }
+});
 
 export { router }

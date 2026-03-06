@@ -10,7 +10,7 @@ export default function Footer() {
                     <ul>
                         <li><Link to="/">Homepage</Link></li>
                         <li><Link to="/catalogo">Catalogo</Link></li>
-                        <li><Link to="/aste">Aste</Link></li>
+                        <li><Link to="/auctions">Aste</Link></li>
                         <li><Link to="http://localhost:3000/api-docs/">Swagger</Link></li>
                     </ul>
                 </nav>

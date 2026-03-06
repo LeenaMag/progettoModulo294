@@ -10,7 +10,7 @@ import { router as ItemRouter } from './routes/item_routes.js'
 import { router as UserRouter } from './routes/user_routes.js'
 import { router as SearchRouter } from './routes/search_routes.js'
 
-import { checkExpiredAuctions } from './utils/item_utils.js'
+import { closeExpiredAuctionsJob } from './utils/auction_utils.js';
 
 
 
@@ -66,12 +66,13 @@ const option = {
 }
 
 setInterval(async () => {
-    try {
-        await checkExpiredAuctions();
-    } catch (error) {
-        console.error("Error checking expired auctions:", error);
-    }
-}, 2 * 60 * 1000);
+  try {
+    await closeExpiredAuctionsJob();
+  } catch (e) {
+    console.error('closeExpiredAuctionsJob error:', e);
+  }
+}, 60_000);
+
 
 app.use(session({
     secret: process.env.SECRET,
