@@ -50,6 +50,7 @@ export default function Header() {
 
                     <li><Link to="/aste/crea">{t("header.newAuction")}</Link></li>
                     <li><Link to="/tag">{t("header.tags")}</Link></li>
+                    <li><Link to="/notifiche">{t("header.notification")}</Link></li>
                     <li><Link to="/preferiti">{t("header.favorites")}</Link></li>
                     <li><Link to="/catalogo">{t("header.cart")}</Link></li>
                     <li><Link to="/chats">{t("header.chat")}</Link></li>

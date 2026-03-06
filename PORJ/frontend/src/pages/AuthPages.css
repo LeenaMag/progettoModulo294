@@ -1,64 +1,4 @@
-/*.authContainer {
-    place-self: center;
-    background-color: #7d7d7d;
-    margin: 5px;
-    margin-top: 5%;
-    border-radius: 20px;
-    width: 33%;
-    min-height: 350px;
-    place-items: center;
-}
 
-.errorMessage {
-    background-color: #ff000084;
-    padding: 10px;
-    width: 52%;
-    border: 2px solid #ff0000;
-    text-align: center;
-}
-
-#redirectButton {
-    color: blue;
-}
-
-.formInput, profile-input {
-    display: grid;
-    align-items: center;
-    margin: 20px;
-}
-
-.formInput input, .profile-input {
-    font-size: 20px;
-    border-radius: 10px;
-    padding: 5px;
-    border: none;
-    color: #ffffff;
-    background-color: #242424;
-}
-
-.btnSubmit {
-    display: block;
-    margin: auto;
-    width: 75%;
-    color: #ffffff;
-    background-color: #00c3ff94;
-    border: none;
-    border-radius: 10px;
-    padding: 10px;
-    margin-top: 10px;
-    margin-bottom: 20px;
-}
-
-.profile-input::file-selector-button{
-    color: #ffffff;
-    background-color: #00c3ff94;
-}
-
-.profile-input{
-    color: #7d7d7d;
-}*/
-
-/* ========= Auth pages ========= */
 .authContainer{
   width: min(460px, 92vw);
   margin: 28px auto 0;
@@ -82,7 +22,7 @@
   margin-top: 10px;
 }
 
-/* Error */
+
 .errorMessage{
   background: rgba(251,113,133,.14);
   border: 1px solid rgba(251,113,133,.45);
@@ -93,7 +33,7 @@
   margin: 10px 0 6px;
 }
 
-/* Inputs */
+
 .formInput{
   display: grid;
   gap: 8px;
@@ -104,7 +44,7 @@
   font-size: 1rem;
 }
 
-/* Profile image input */
+
 .profile-input{
   width: 100%;
   background: rgba(18,27,46,.55);
@@ -125,7 +65,6 @@
   cursor: pointer;
 }
 
-/* Submit */
 .btnSubmit{
   width: 100%;
   margin-top: 6px;
@@ -143,7 +82,7 @@
 }
 #redirectButton a:hover{ color: var(--primary-2); }
 
-/* Solo campi testuali (NON file) */
+
 .authContainer input:not([type="file"]){
   height: 44px;
   padding: 10px 12px;
@@ -154,7 +93,7 @@
   font: inherit;
 }
 
-/* Autofill solo per campi NON file */
+
 .authContainer input:not([type="file"]):-webkit-autofill,
 .authContainer input:not([type="file"]):-webkit-autofill:hover,
 .authContainer input:not([type="file"]):-webkit-autofill:focus,
@@ -166,7 +105,6 @@
   caret-color: rgba(255,255,255,.92);
 }
 
-/* 1) Forza font e padding uguali per tutti gli input della form */
 .authContainer form input:not([type="file"]),
 .authForm input:not([type="file"]){
   font-family: inherit !important;
@@ -179,7 +117,6 @@
   text-indent: 0 !important;
 }
 
-/* 2) Forza specificamente il campo username (copre casi comuni) */
 .authContainer input[name="username"],
 .authContainer input#username,
 .authContainer input[type="text"][autocomplete="username"],
@@ -192,7 +129,7 @@
   text-indent: 0 !important;
 }
 
-/* 3) Autofill: evita differenze di font/padding e sfondo */
+
 .authContainer input:-webkit-autofill{
   font-family: inherit !important;
   font-size: 1rem !important;

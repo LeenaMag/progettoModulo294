@@ -1,4 +1,3 @@
-/* ========= Add Item Page ========= */
 .center{
   width: min(980px, 92vw);
   min-height: 520px;
@@ -15,7 +14,7 @@
   gap: 12px;
 }
 
-/* title (scope it to avoid changing other pages) */
+
 .center h2{
   color: rgba(255,255,255,.92);
   margin: 0 0 6px 0;
@@ -31,13 +30,13 @@
   align-items: start;
 }
 
-/* columns */
+
 .colL, .colR{
   padding-top: 8px;
   width: auto;
 }
 
-/* Owner aligned right */
+
 .prewiewOwner{
   display: flex;
   justify-content: flex-end;
@@ -45,7 +44,7 @@
   margin-bottom: 6px;
 }
 
-/* File input big box */
+
 .file-input{
   width: 100%;
   min-height: 300px;
@@ -69,7 +68,7 @@
   cursor: pointer;
 }
 
-/* Inputs */
+
 .nome, .prezzo, .tag, .descrizione{
   width: 100%;
   margin-top: 10px;
@@ -87,7 +86,7 @@
 .tag{ height: 44px; }
 .descrizione{ height: 120px; resize: vertical; resize: none;}
 
-/* Button */
+
 .submit-btn{
   width: min(240px, 100%);
   height: 44px;
@@ -95,7 +94,7 @@
   border-radius: 999px;
 }
 
-/* Responsive: stack columns */
+
 @media (max-width: 860px){
   .flexed{ grid-template-columns: 1fr; }
   .prewiewOwner{ justify-content: flex-start; }
@@ -103,282 +102,3 @@
 }
 
 
-/*
-// ===== Main card ===== 
-.center {
-  // instead of fixed 800px 
-  width: 80%;
-  max-width: 900px;
-
-  // instead of fixed 520px //
-  min-height: 520px;      // keeps the old look on desktop 
-  height: auto;           // grows if content grows 
-
-  margin: 20px auto 0;
-  padding: 20px;
-
-  background-color: #858383;
-  border-radius: 20px;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-// keep title style 
-h2 {
-  color: aliceblue;
-  margin: 0 0 10px 0;
-}
-
-// ===== Form ===== 
-.add-item-form {
-  width: 100%;            // take all the card width 
-}
-
-// Two columns container 
-.flexed {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 30px;
-  width: 100%;
-}
-
-// Right column 
-.colR {
-  padding-top: 20px;
-  width: 70%;
-}
-
-// Left column 
-.colL {
-  padding-top: 20px;
-  width: 80%;
-  display: flex;
-  justify-content: center;
-}
-
-// File input big box 
-.file-input {
-  width: 98%;
-  min-height: 280px;      // keeps old size 
-  height: auto;
-
-  border: 1px solid black;
-  background-color: #242424;
-  color: rgba(255, 255, 255, 0.37);
-  padding: 5px;
-  border-radius: 10px;
-
-  display: block;
-  margin: 0 auto;
-}
-
-.file-input::file-selector-button {
-  background: #00c3ff94;
-  color: white;
-  border: none;
-  padding: 10px 14px;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-// Inputs: keep same look but make them responsive 
-.nome, .prezzo, .tag, .descrizione {
-  border-radius: 5px;
-  background-color: #242424;
-  color: white;
-  padding: 5px;
-  width: 80%;             // same as your old look 
-}
-
-.nome, .prezzo {
-  height: 25px;
-}
-
-.nome { margin-top: 25px; }
-.prezzo { margin-top: 10px; }
-
-.tag { margin-top: 10px; height: 35px; }
-
-.descrizione {
-  margin-top: 10px;
-  height: 100px;
-}
-
-// Button 
-.submit-btn {
-  background-color: #00c3ff94;
-  color: white;
-  border: none;
-  margin-top: 10px;
-  border-radius: 10px;
-
-  width: 20%;
-  min-width: 140px;       // so it doesn't become tiny 
-  height: 40px;
-  cursor: pointer;
-}
-
-// Owner aligned right 
-.prewiewOwner {
-  display: flex;
-  justify-content: flex-end;
-  width: 100%;
-  margin-bottom: 10px;
-}
-
-
-
-// ===== Responsive: when screen is small, stack columns ===== 
-@media (max-width: 768px) {
-  .center {
-    width: 92%;
-    padding: 16px;
-  }
-
-  .flexed {
-    flex-direction: column;
-    gap: 16px;
-  }
-
-  .colL, .colR {
-    width: 100%;
-    padding-top: 10px;
-  }
-
-  .file-input {
-    width: 100%;
-    min-height: 220px;
-  }
-
-  .nome, .prezzo, .tag, .descrizione {
-    width: 100%;
-  }
-
-  .prewiewOwner {
-    justify-content: center; // better on mobile 
-  }
-
-  .submit-btn {
-    width: 60%;
-  }
-}
-*/
-/* Questa versione non è dinamica
-.flexed{
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    gap: 30px;
-
-     
-}
-.center{ 
-    width: 800px;
-    height: 525px;
-    margin: 0 auto;   
-    margin-top: 20px;
-    background-color: #858383;
-    border-radius: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-.add-item-form{
-    width: 80%;
-    max-width: 900px;
-    margin: 0 auto;
-}
-
-h2{
-    color: aliceblue;
-}
-
-.colR{
-    padding-top: 20px;
-    width: 70%;
-}
-
-.colL{
-    padding-top: 20px;
-    width: 80%;
-    height: 80%;
-    display: flex;
-    justify-content: center;
-}
-
-.file-input{
-    width: 98%;
-    border: black 1px solid;
-    height: 280px;
-    background-color: #242424;
-    color: rgba(255, 255, 255, 0.37);
-    padding: 5px;
-    border-radius: 10px;
-    display: block;
-    margin: 0 auto;
-}
-
-.file-input::file-selector-button {
-
-  background: #00c3ff94;
-  color: white;
-  border: none;
-  padding: 10px 14px;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-.nome, .prezzo{
-    border-radius: 5px;
-    background-color: #242424;
-    color: white;
-    height: 25px;
-    width: 80%;
-    padding: 5px;
-    margin-top: 25px;
-}
-
-.prezzo{
-    margin-top: 10px;
-}
-
-.tag{
-    border-radius: 5px;
-    background-color: #242424;
-    color: white;
-    height: 25px;
-    padding: 5px;
-    margin-top: 10px;
-    
-}
-
-.descrizione{
-    border-radius: 5px;
-    background-color: #242424;
-    color: white;
-    width: 80%;
-    height: 100px; 
-    padding: 5px;  
-    margin-top: 10px;
-}
-
-.submit-btn{
-    background-color: #00c3ff94;
-    color: white;
-    border: none;
-    margin-top: 10px;
-    border-radius: 10px;
-    width: 20%;
-    height: 40px;
-}
-
-.prewiewOwner{
-    display: flex;
-    justify-content: flex-end;
-    width: 60%;
-}
-
-*/

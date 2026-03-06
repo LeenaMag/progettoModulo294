@@ -293,7 +293,7 @@ router.delete('/items/:itemId', isAuthenticated, async (req, res) => {
 
 /**
  * @swagger
- * /items/{itemId}/favorites:
+ * /Items/items/{itemId}/favorites:
  *   post:
  *     tags: ["item"]
  *     summary: Aggiunge un'oggetto alla lista dei preferiti
@@ -316,7 +316,7 @@ router.post('/items/favorites/:iteamId', isAuthenticated, async (req, res) => {
       return res.end(JSON.stringify({ error: 'Oggetto inesistente' }))
     }
     const checkFavorite = await isItemInFavorites(userId, itemId)
-    if (checkFavorite.length === 0) {
+    if (checkFavorite.length > 0) {
       res.statusCode = 204
       res.setHeader('Content-Type', 'application/json')
       return res.end(JSON.stringify({ error: 'Oggetto già presente fra i preferiti' }))
@@ -333,7 +333,7 @@ router.post('/items/favorites/:iteamId', isAuthenticated, async (req, res) => {
 
 /**
  * @swagger
- * /items/{itemId}/favorites:
+ * /Items/items/{itemId}/favorites:
  *   delete:
  *     tags: ["item"]
  *     summary: Rimuove un prodotto dai preferiti
@@ -446,7 +446,7 @@ router.delete('/items/cart/:itemId', isAuthenticated, async (req, res) => {
 
 /**
  * @swagger
- * /cart:
+ * /Items/cart:
  *   get:
  *     tags: ["item"]
  *     summary: Ritorna tutti gli elementi nel carrello
@@ -476,22 +476,6 @@ router.delete('/items/cart/:itemId', isAuthenticated, async (req, res) => {
  *       500:
  *         description: Errore interno del server
  */
-
-
-/*router.get('/cart', isAuthenticated, async (req, res) => {
-  try {
-    const userId = req.session.user.id
-    const cartItems = await getCartItemsByUserId(userId)
-    res.statusCode = 200
-    res.setHeader('Content-Type', 'application/json')
-    res.end(JSON.stringify(cartItems))
-  } catch (err) {
-    console.error(err)
-    res.statusCode = 500
-    res.setHeader('Content-Type', 'application/json')
-    res.end(JSON.stringify({ error: err }))
-  }
-})*/
 router.get('/cart', isAuthenticated, async (req, res) => {
   try {
 
@@ -621,71 +605,7 @@ router.patch('/items/update', isAuthenticated, async (req, res) => {
  *   
  * 
  */
-/*router.post('/items/auction/createAuction', isAuthenticated, async(req, res) => {
-  try {
-    const userId = req.session.user.id
-    const { itemId, dataI, minPrice, dataF} = req.body
-    
 
-    //const item = await getItemById(itemId)
-
-    if (item.length > 0) {
-      res.statusCode = 401
-      res.setHeader('Content-Type', 'application/json')
-      return res.end(JSON.stringify({ error: 'Oggetto inesistente' }))
-    }
-
-    if(item.fk_utente === userId){
-      const newAct = await newAuction(itemId, dataI, minPrice, dataF)
-    }
-
-    res.statusCode = 200
-    res.setHeader('Content-Type', 'application/json')
-    res.end()//
-    const item = await getItemById(itemId);
-
-    if (!item) {
-      return res.status(404).json({ error: 'Oggetto inesistente' });
-    }
-
-    if (item.fk_utente !== userId) {
-      return res.status(403).json({ error: 'Non sei il proprietario' });
-    }
-
-    await newAuction(itemId, dataI, minPrice, dataF);
-    return res.status(200).end();
-    
-  } catch (err) {
-    console.error(err)
-    res.statusCode = 500
-    res.setHeader('Content-Type', 'application/json')
-    res.end(JSON.stringify({ error: err }))
-  }
-})*/
-
-/*
-router.post('/items/auction/createAuction', isAuthenticated, async (req, res) => {
-  try {
-    const userId = req.session.user.id;
-    const { itemId, dataI, minPrice, dataF } = req.body;
-
-    const item = await getItemById(itemId);
-
-    if (!item) {
-      return res.status(404).json({ error: 'Oggetto inesistente' });
-    }
-
-    if (item.fk_utente !== userId) {
-      return res.status(403).json({ error: 'Non sei il proprietario dell’oggetto' });
-    }
-
-    await newAuction(itemId, dataI, minPrice, dataF);
-    return res.status(200).end();
-  } catch (err) {
-    console.error(err);
-    return res.status(500).json({ error: String(err) });
-  }
-});*/
 
 router.post('/items/auction/createAuction', isAuthenticated, async (req, res) => {
   try {
@@ -711,7 +631,19 @@ router.post('/items/auction/createAuction', isAuthenticated, async (req, res) =>
 });
 
 
-// LISTA ASTE APERTE (ricca) -> serve per /aste
+/**
+ * @swagger
+ * /Items/items/auction/open:
+ *   get:
+ *     tags: ["auction"]
+ *     summary: Elenca le aste aperte
+ *     description: Ritorna la lista arricchita delle aste attualmente aperte.
+ *     responses:
+ *       200:
+ *         description: Elenco aste recuperato
+ *       500:
+ *         description: Errore interno del server
+ */
 router.get('/items/auction/open', async (req, res) => {
   try {
     const rows = await getOpenAuctionsRich();
@@ -722,7 +654,26 @@ router.get('/items/auction/open', async (req, res) => {
   }
 });
 
-// DETTAGLIO ASTA (ricco) + ultime offerte
+/**
+ * @swagger
+ * /Items/items/auction/detail/{auctionId}:
+ *   get:
+ *     tags: ["auction"]
+ *     summary: Recupera il dettaglio di un'asta
+ *     parameters:
+ *       - in: path
+ *         name: auctionId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Dettaglio asta recuperato
+ *       404:
+ *         description: Asta non trovata
+ *       500:
+ *         description: Errore interno del server
+ */
 router.get('/items/auction/detail/:auctionId', async (req, res) => {
   try {
     const { auctionId } = req.params;
@@ -738,6 +689,24 @@ router.get('/items/auction/detail/:auctionId', async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /Items/items/auction/user/{userId}:
+ *   get:
+ *     tags: ["auction"]
+ *     summary: Elenca le aste create da un utente
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Aste utente recuperate
+ *       500:
+ *         description: Errore interno del server
+ */
 router.get('/items/auction/user/:userId', async (req, res) => {
   try {
     const userId = req.params.userId;
@@ -747,6 +716,29 @@ router.get('/items/auction/user/:userId', async (req, res) => {
     res.status(500).json({ error: String(err) });
   }
 });
+
+/**
+ * @swagger
+ * /Items/items/auction/{auctionId}/close:
+ *   patch:
+ *     tags: ["auction"]
+ *     summary: Chiude manualmente un'asta
+ *     parameters:
+ *       - in: path
+ *         name: auctionId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Asta chiusa con successo
+ *       403:
+ *         description: Utente non autorizzato
+ *       404:
+ *         description: Asta non trovata
+ *       500:
+ *         description: Errore interno del server
+ */
 
 router.patch('/items/auction/:auctionId/close', isAuthenticated, async (req, res) => {
   try {
@@ -796,85 +788,22 @@ router.get(`/items/auction/:auctionId`,async(req, res)=>{
 
 /**
  * @swagger
- * /items/auction/createAuction:
+ * /Items/items/auction/newOffer:
  *   post:
- *     tags: ["item"]
- *     summary: Apre una nuova asta
- *     description: Crea una nuova asta se l'oggetto scelto appartiene all'utente loggato
+ *     tags: ["auction"]
+ *     summary: Inserisce una nuova offerta su un'asta
+ *     description: Valida l'offerta, la salva e aggiorna l'offerta vincente corrente.
  *     responses:
  *       200:
- *         description: Info Modificate
+ *         description: Offerta registrata con successo
+ *       400:
+ *         description: Offerta non valida o asta chiusa
+ *       404:
+ *         description: Asta inesistente
  *       500:
- *   
- * 
+ *         description: Errore interno del server
  */
-/*router.post('/items/auction/newOffer', isAuthenticated, async(req, res) => {
-  try {
-    const userId = req.session.user.id
-    const { auctionId, price } = req.body
-    
-
-    const auction = await infoAuction(auctionId)
-
-
-    if (auction.length > 0 || auction.dataF) {
-      res.statusCode = 401
-      res.setHeader('Content-Type', 'application/json')
-      return res.end(JSON.stringify({ error: 'Asta ineistente' }))
-    }
-
-    if(!auction.aperta){
-      res.statusCode = 400
-      res.setHeader('Content-Type', 'application/json')
-      return res.end(JSON.stringify({ error: 'Asta chiusa' }))      
-    }
-
-   
-
-    const offer = (auction.fk_offerta === null)? null : await infoOffer(auction.fk_offerta)
-
-    if(offer === null && auction.minPrezzo >= price ){
-      const newOff = await newOffer(userId, auctionId, price)
-    } else if (offer.valore < price){
-      const newOff = await newOffer(userId, auctionId, price)
-    }else{
-      res.statusCode = 401
-      res.setHeader('Content-Type', 'application/json')
-      return res.end(JSON.stringify({ error: 'Valore dell\' offerta insufficente' }))
-    }
-    const winningOffer = await findOffer(userId, auctionId, price)
-    const newWinner = await changeWinningOffer (winningOffer.id , auctionId)
-
-    
-    //data finale dell'asta
-    const input = auction.dataF
-    const [datePart, timePart] = input.split(" ")
-    let [year, month, day] = datePart.split(".")
-    let [hour, minute] = timePart.split(":")
-    const inputDate = new Date(year, month - 1, day, hour-1, minute);
-    
-    //now date
-    const now = new Date()
-
-    if (inputDate <= now){
-      inputDate.setHours(inputDate.getHours() + 1)
-      const result = `${inputDate.getFullYear()}.${inputDate.getMonth() + 1}.${inputDate.getDay()} ${inputDate.getHours()}:${inputDate.getMinutes()}`
-      const newTime = await setNewTime(auction.id, result)
-    }
-
-
-
-    res.statusCode = 200
-    res.setHeader('Content-Type', 'application/json')
-    res.end()
-    
-  } catch (err) {
-    console.error(err)
-    res.statusCode = 500
-    res.setHeader('Content-Type', 'application/json')
-    res.end(JSON.stringify({ error: err }))
-  }
-})*/
+/
 
 router.post('/items/auction/newOffer', isAuthenticated, async (req, res) => {
   try {
@@ -950,6 +879,21 @@ router.post('/items/auction/newOffer', isAuthenticated, async (req, res) => {
     return res.status(500).json({ error: String(err) });
   }
 });
+
+/**
+ * @swagger
+ * /Items/notifications:
+ *   get:
+ *     tags: ["notification"]
+ *     summary: Recupera le notifiche dell'utente autenticato
+ *     responses:
+ *       200:
+ *         description: Notifiche recuperate con successo
+ *       401:
+ *         description: Utente non autenticato
+ *       500:
+ *         description: Errore interno del server
+ */
 
 router.get('/notifications', isAuthenticated, async (req, res) => {
   try {

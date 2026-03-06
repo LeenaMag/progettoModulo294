@@ -201,13 +201,13 @@ export default function UserSettingsPage() {
 }
 
 export async function loader() {
-  // 1) check auth
+
   const authRes = await fetch('http://localhost:3000/user/checkAuth', { credentials: 'include' });
   const auth = await authRes.json();
 
   if (!auth?.loggedIn) return redirect('/login');
 
-  // 2) prendo profilo completo da username (endpoint già esistente)
+
   const profRes = await fetch(`http://localhost:3000/user/user/${auth.username}`, {
     credentials: 'include',
   });

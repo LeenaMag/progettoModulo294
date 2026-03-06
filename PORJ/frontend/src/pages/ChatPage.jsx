@@ -118,7 +118,7 @@ export default function ChatPage() {
 }
 
 export async function loader({ params }) {
-  // 1) checkAuth -> prendo username (id spesso NON c'è)
+
   const authRes = await fetch('http://localhost:3000/user/checkAuth', { credentials: 'include' });
   const auth = await authRes.json();
   if (!auth?.loggedIn) return redirect('/login');
@@ -126,7 +126,7 @@ export async function loader({ params }) {
   const myUsername = auth?.username;
   if (!myUsername) return redirect('/login');
 
-  // 2) ricavo il mio id vero dal profilo
+  // ricavo l'id dell'utente loggato vero dal profilo
   const meRes = await fetch(`http://localhost:3000/user/user/${myUsername}`, {
     credentials: 'include',
   });
@@ -137,7 +137,7 @@ export async function loader({ params }) {
   const me = await meRes.json();
   const myUserId = me?.id;
 
-  // 3) altro utente
+  // altro utente
   const otherRes = await fetch(`http://localhost:3000/user/userId/${params.ownerId}`, {
     credentials: 'include',
   });
@@ -147,7 +147,7 @@ export async function loader({ params }) {
   }
   const otherUser = await otherRes.json();
 
-  // 4) chat + messaggi
+  // chat + messaggi
   const chatRes = await fetch(`http://localhost:3000/user/chatMessages/${params.ownerId}`, {
     credentials: 'include',
   });

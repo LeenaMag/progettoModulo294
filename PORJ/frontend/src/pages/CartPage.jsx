@@ -86,7 +86,6 @@ export default function CartPage() {
     }
   };
 
-  // layout a righe da 3 (come HomePage)
   const rows = [];
   for (let i = 0; i < items.length; i += 3) {
     rows.push(

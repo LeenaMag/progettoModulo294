@@ -145,7 +145,6 @@ export default function CreateAuctionPage() {
       setMinPrice('');
       revalidator.revalidate();
 
-      // vai alla lista aste (o cambia con /auction/.. se un domani ritorni l'id)
       setTimeout(() => navigate('/auctions'), 250);
     } catch (err) {
       setErrMsg(String(err?.message || err));
@@ -242,12 +241,12 @@ export default function CreateAuctionPage() {
 }
 
 export async function loader() {
-  // 1) check auth
+
   const authRes = await fetch('http://localhost:3000/user/checkAuth', { credentials: 'include' });
   const auth = await authRes.json();
   if (!auth?.loggedIn) return redirect('/login');
 
-  // 2) profilo completo + itemsForSale
+  // profilo completo + itemsForSale
   const profRes = await fetch(`http://localhost:3000/user/user/${auth.username}`, {
     credentials: 'include',
   });

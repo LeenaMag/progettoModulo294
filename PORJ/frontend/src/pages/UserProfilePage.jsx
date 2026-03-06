@@ -43,7 +43,7 @@ function ItemCard({ item }) {
 }
 
 function AuctionCard({ auction }) {
-  // atteso: { id, dataF, minPrezzo, currentPrice, itemId, itemNome, itemFoto, aperta }
+
   const imgSrc = resolveImg(auction?.itemFoto, 'uploads/items');
   const price = auction?.currentPrice ?? auction?.minPrezzo;
   const priceLabel = auction?.currentPrice != null ? 'Offerta in testa' : 'Prezzo minimo';
@@ -89,7 +89,7 @@ export default function UserProfilePage() {
   const { user: authUser } = useContext(AuthContext);
   const { profile, auctions } = useLoaderData();
 
-  const [tab, setTab] = useState('items'); // 'items' | 'auctions'
+  const [tab, setTab] = useState('items'); 
 
   const isMe = useMemo(() => {
     return authUser?.username && profile?.username
@@ -189,7 +189,7 @@ export default function UserProfilePage() {
 }
 
 export async function loader({ params }) {
-  // 1) profilo + itemsForSale (già nel tuo backend)
+
   const profRes = await fetch(`http://localhost:3000/user/user/${params.username}`, {
     credentials: 'include',
   });
@@ -201,8 +201,7 @@ export async function loader({ params }) {
 
   const profile = await profRes.json();
 
-  // 2) aste dell'utente (endpoint che aggiungiamo sotto).
-  // Se non esiste ancora, non rompo la pagina: torno [].
+
   let auctions = [];
   try {
     const aucRes = await fetch(`http://localhost:3000/Items/items/auction/user/${profile.id}`, {

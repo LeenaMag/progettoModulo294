@@ -628,7 +628,28 @@ router.post('/chats', isAuthenticated, async (req, res) => {
   }
 })
 
-
+/**
+ * @swagger
+ * /user/checkAuth:
+ *   get:
+ *     tags: ["user"]
+ *     summary: Verifica lo stato di autenticazione
+ *     description: Restituisce se l'utente è loggato e, in caso positivo, username e foto salvati in sessione.
+ *     responses:
+ *       200:
+ *         description: Stato autenticazione recuperato con successo
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 loggedIn:
+ *                   type: boolean
+ *                 username:
+ *                   type: string
+ *                 foto:
+ *                   type: string
+ */
 
 
 
@@ -641,6 +662,54 @@ router.get("/checkAuth", (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /user/userId/{id}:
+ *   get:
+ *     tags: ["user"]
+ *     summary: Ritorna il profilo pubblico di un utente tramite id
+ *     description: Restituisce id, nome, cognome, username, foto e gli articoli in vendita dell'utente cercato per id.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Id dell'utente
+ *     responses:
+ *       200:
+ *         description: Profilo recuperato con successo
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: integer
+ *                 name:
+ *                   type: string
+ *                 surname:
+ *                   type: string
+ *                 username:
+ *                   type: string
+ *                 foto:
+ *                   type: string
+ *                 itemsForSale:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *       401:
+ *         description: Utente inesistente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *       500:
+ *         description: Errore interno del server
+ */
 
 router.get('/userId/:id', async (req, res) => {
   try {
@@ -669,6 +738,46 @@ router.get('/userId/:id', async (req, res) => {
   }
 })
 
+/**
+ * @swagger
+ * /user/chatMessages/{user1}:
+ *   get:
+ *     tags: ["message"]
+ *     summary: Recupera o crea una chat con un altro utente e ritorna i messaggi
+ *     description: Cerca la chat tra l'utente autenticato e l'utente indicato; se non esiste la crea, inserisce un messaggio iniziale vuoto e restituisce chatId e messaggi.
+ *     parameters:
+ *       - in: path
+ *         name: user1
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Id dell'altro utente
+ *     responses:
+ *       200:
+ *         description: Chat e messaggi recuperati con successo
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 chatId:
+ *                   type: integer
+ *                 messages:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/message'
+ *       401:
+ *         description: Chat inesistente e impossibile crearla oppure utente non autenticato
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *       500:
+ *         description: Errore interno del server
+ */
 router.get('/chatMessages/:user1', isAuthenticated,async (req, res) => {
   try {
     const user1 = req.params.user1

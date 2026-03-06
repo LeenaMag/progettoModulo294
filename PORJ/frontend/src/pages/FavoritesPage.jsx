@@ -90,7 +90,7 @@ export default function FavoritesPage() {
     }
   };
 
-  // layout a righe da 3 (come Home)
+
   const rows = [];
   for (let i = 0; i < items.length; i += 3) {
     rows.push(
