@@ -892,7 +892,7 @@ router.post('/items/auction/newOffer', isAuthenticated, async (req, res) => {
     }
 
     // prezzo minimo: deve essere price >= minPrezzo (non il contrario)
-    if (Number(price) < Number(auction.minPrezzo)) {
+    if (Number(price) < Number(auction.minPrezzo)+ 10.0) {
       return res.status(400).json({ error: 'Offerta sotto il prezzo minimo' });
     }
 

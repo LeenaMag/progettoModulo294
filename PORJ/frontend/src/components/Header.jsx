@@ -42,6 +42,9 @@ export default function Header() {
             </nav>
             <nav className="header-nav">
                 <ul className="nav-list">
+                    
+                    <li><Link to="/aste/crea">nuova asta</Link></li>$
+                    <li><Link to="/tag">tag</Link></li>
                     <li><Link to="/preferiti">preferiti</Link></li>
                     <li><Link to="/catalogo">carrello</Link></li>
                     <li><Link to="/chats">chat</Link></li>

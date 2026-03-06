@@ -32,7 +32,7 @@ const router = createBrowserRouter([{
   hydrateFallbackElement: <div>Loading...</div>,
   children: [
     { index: true, element: <HomePage />, loader: itemsLoader },
-    { path: "/ricerca/:ricerca", element: <HomePage />, loader: itemsLoader },
+    { path: "/search/:ricerca", element: <HomePage />, loader: itemsLoader },
     { path: "/addItem", element: <AddItemPage />, loader: tagsloader },
     { path: "/login", element: <LoginPage /> },
     { path: "/Singup", element: <Singup /> },

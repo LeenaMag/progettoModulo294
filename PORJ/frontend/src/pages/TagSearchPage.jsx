@@ -91,7 +91,7 @@ export default function TagSearchPage() {
   const navigate = useNavigate();
   const { tags, selectedTag, selectedTagId, items } = useLoaderData();
 
-  
+  const page = Number(new URLSearchParams(window.location.search).get('page') || '1');
 
   const tagsNorm = useMemo(() => (Array.isArray(tags) ? tags.map(normalizeTag) : []), [tags]);
   const itemsArr = useMemo(() => (Array.isArray(items) ? items : []), [items]);
@@ -109,6 +109,18 @@ export default function TagSearchPage() {
           <ItemCard key={`i-${i + idx}`} item={it} />
         ))}
       </div>
+    );
+  }
+  function goToPage(newPage) {
+    if (newPage < 1) return;
+
+    if (!selectedTagId) {
+      navigate(`/tag?page=${newPage}`);
+      return;
+    }
+
+    navigate(
+      `/tag?tagId=${encodeURIComponent(selectedTagId)}&tag=${encodeURIComponent(selectedTag)}&page=${newPage}`
     );
   }
 
@@ -161,6 +173,17 @@ export default function TagSearchPage() {
             <div className="ts-hint">Clicca un tag sopra per vedere gli oggetti.</div>
           )}
         </div>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', margin: '30px 0' }}>
+                <button onClick={() => goToPage(page - 1)} disabled={page === 1}>
+                    Precedente
+                </button>
+
+                <span>Pagina {page}</span>
+
+                <button onClick={() => goToPage(page + 1)}>
+                    Successiva
+                </button>
+            </div>
       </div>
     </>
   );
@@ -168,6 +191,7 @@ export default function TagSearchPage() {
 
 export async function loader({ request }) {
   const url = new URL(request.url);
+  const page = Number(url.searchParams.get('page') || '1')
 
   const selectedTagId = (url.searchParams.get('tagId') ?? '').trim();
   const selectedTag = (url.searchParams.get('tag') ?? '').trim();
@@ -185,7 +209,7 @@ export async function loader({ request }) {
   }
 
   const itemCandidates = [
-    `http://localhost:3000/search/tag/${encodeURIComponent(selectedTagId)}/1`,
+    `http://localhost:3000/search/tag/${encodeURIComponent(selectedTagId)}/${page}`,
   ];
 
   let items = [];
