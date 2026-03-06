@@ -154,3 +154,17 @@ export async function closeExpiredAuctionsJob() {
 
   return { closed: expired.length };
 }
+
+export async function getNotificationsByUserId(userId) {
+  const [rows] = await con.query(
+    `
+    SELECT id, fk_utente, titolo, testo, tipo
+    FROM notifica
+    WHERE fk_utente = ?
+    ORDER BY id DESC
+    `,
+    [userId]
+  );
+
+  return rows;
+}

@@ -54,7 +54,7 @@ import {
 } from '../utils/item_utils.js'
 import multer from 'multer'
 import { isAuthenticated, createChat, checkChatExist } from '../utils/user_utils.js'
-import { extendAuctionIfSniping, closeAuctionAndNotify, getAuctionOwnerId } from '../utils/auction_utils.js';
+import { extendAuctionIfSniping, closeAuctionAndNotify, getAuctionOwnerId, getNotificationsByUserId} from '../utils/auction_utils.js';
 const upload = multer({ dest: 'uploads/items' });
 
 
@@ -953,18 +953,21 @@ router.post('/items/auction/newOffer', isAuthenticated, async (req, res) => {
 
 router.get('/notifications', isAuthenticated, async (req, res) => {
   try {
-    const [rows] = await con.query(
-      `SELECT id, titolo, testo, tipo, createdAt
-       FROM notifica
-       WHERE fk_utente=?
-       ORDER BY id DESC
-       LIMIT 200`,
-      [req.session.user.id]
-    );
-    res.status(200).json(rows);
+    const userId = req.session?.user?.id;
+
+    if (!userId) {
+      return res.status(401).json({ error: 'Utente non autenticato' });
+    }
+
+    const notifications = await getNotificationsByUserId(userId);
+
+    return res.status(200).json(notifications);
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: String(err) });
+    console.error('Errore notifiche:', err);
+    return res.status(500).json({
+      error: 'Errore nel recupero notifiche',
+      details: err.message
+    });
   }
 });
 

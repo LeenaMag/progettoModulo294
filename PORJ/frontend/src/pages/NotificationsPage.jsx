@@ -4,6 +4,7 @@ import SearchBar from '../components/SearchBar';
 
 export default function NotificationsPage() {
   const notifs = useLoaderData();
+
   return (
     <>
       <SearchBar />
@@ -24,7 +25,7 @@ export default function NotificationsPage() {
                 <div style={{ fontWeight: 900 }}>{n.titolo}</div>
                 <div style={{ opacity: 0.85, marginTop: 6 }}>{n.testo}</div>
                 <div style={{ opacity: 0.65, marginTop: 8, fontSize: 12 }}>
-                  {n.createdAt} — {n.tipo}
+                  {n.tipo}
                 </div>
               </div>
             ))}
@@ -38,11 +39,28 @@ export default function NotificationsPage() {
 }
 
 export async function loader() {
-  const authRes = await fetch('http://localhost:3000/user/checkAuth', { credentials: 'include' });
-  const auth = await authRes.json();
-  if (!auth?.loggedIn) return redirect('/login');
+  const authRes = await fetch('http://localhost:3000/user/checkAuth', {
+    credentials: 'include'
+  });
 
-  const res = await fetch('http://localhost:3000/user/notifications', { credentials: 'include' });
-  if (!res.ok) throw new Error('Errore notifiche');
-  return res.json();
+  if (!authRes.ok) {
+    return redirect('/login');
+  }
+
+  const auth = await authRes.json();
+
+  if (!auth?.loggedIn) {
+    return redirect('/login');
+  }
+
+  const res = await fetch('http://localhost:3000/Items/notifications', {
+    credentials: 'include'
+  });
+
+  if (!res.ok) {
+    const txt = await res.text();
+    throw new Error(`Errore notifiche: ${txt}`);
+  }
+
+  return await res.json();
 }

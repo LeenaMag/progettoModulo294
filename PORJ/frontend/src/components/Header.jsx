@@ -4,8 +4,8 @@ import { AuthContext} from '../context/AuthContext';
 import './Header.css';
 import { useTranslation } from 'react-i18next';
 
-// Header component with a simple navigation menu and no logo
 export default function Header() {
+
     const { t, i18n } = useTranslation();
     const {user, logout} = useContext(AuthContext);
     const navigate = useNavigate();
@@ -22,40 +22,46 @@ export default function Header() {
 
     return (
         <header className="site-header">
+
             <nav className="nav-right">
                 <ul className="nav-list">
                     {user ? (
                         <>
-                            <li><Link to="/addItem">{t("Aggiungi Prodotto")}</Link></li>
+                            <li><Link to="/addItem">{t("header.addProduct")}</Link></li>
+
                             <li>
-                                <span>Benvenuto/a, {user.username}</span>
-                                <button onClick={handleLogout} className="logout-btn">Logout</button>
+                                <span>{t("header.welcome")}, {user.username}</span>
+                                <button onClick={handleLogout} className="logout-btn">
+                                    {t("header.logout")}
+                                </button>
                             </li>
                         </>
                     ) : (
                         <>
-                            <li><Link to="/login">login</Link></li>
-                            <li><Link to="/singup">singup</Link></li>
+                            <li><Link to="/login">{t("header.login")}</Link></li>
+                            <li><Link to="/singup">{t("header.signup")}</Link></li>
                         </>
                     )}
                 </ul>
             </nav>
+
             <nav className="header-nav">
                 <ul className="nav-list">
-                    
-                    <li><Link to="/aste/crea">nuova asta</Link></li>$
-                    <li><Link to="/tag">tag</Link></li>
-                    <li><Link to="/preferiti">preferiti</Link></li>
-                    <li><Link to="/catalogo">carrello</Link></li>
-                    <li><Link to="/chats">chat</Link></li>
-                    <li><Link to="/impostazioni">impostazioni</Link></li>
+
+                    <li><Link to="/aste/crea">{t("header.newAuction")}</Link></li>
+                    <li><Link to="/tag">{t("header.tags")}</Link></li>
+                    <li><Link to="/preferiti">{t("header.favorites")}</Link></li>
+                    <li><Link to="/catalogo">{t("header.cart")}</Link></li>
+                    <li><Link to="/chats">{t("header.chat")}</Link></li>
+                    <li><Link to="/impostazioni">{t("header.settings")}</Link></li>
+
                 </ul>
             </nav>
-            <li>
-                        <button onClick={toggleLanguage} className="lang-btn">
-                            {i18n.language === 'it' ? 'IT' : 'EN'}
-                        </button>
-                    </li>
+
+            <button onClick={toggleLanguage} className="lang-btn">
+                {i18n.language === 'it' ? 'IT' : 'EN'}
+            </button>
+
         </header>
     );
 }
