@@ -119,3 +119,42 @@
     width: 100%;
   }
 }
+
+.infoItemActions{
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+
+.infoItemBtn{
+  height: 44px;
+  padding: 0 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(45,212,255,.12);
+  color: rgba(255,255,255,.95);
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.infoItemBtn.secondary{
+  background: rgba(255,255,255,.08);
+}
+
+.infoItemBtn:disabled{
+  opacity: .6;
+  cursor: not-allowed;
+}
+
+.infoItemOk{
+  margin-top: 10px;
+  color: rgba(34,197,94,.95);
+  font-weight: 900;
+}
+
+.infoItemError{
+  margin-top: 10px;
+  color: rgba(251,113,133,.95);
+  font-weight: 900;
+}

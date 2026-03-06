@@ -1,0 +1,179 @@
+.editItemWrap{
+  width: min(1000px, 92vw);
+  margin: 20px auto 0;
+  padding: 16px;
+}
+
+.editItemHead{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  background: rgba(18,27,46,.70);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 14px;
+}
+
+.editItemHeadActions{
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.editItemCard{
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 16px;
+
+  background: rgba(18,27,46,.70);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 16px;
+}
+
+.editItemPreview{
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.editItemImageBox{
+  width: 100%;
+  min-height: 280px;
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius: 16px;
+  overflow: hidden;
+  background: rgba(0,0,0,.18);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.editItemImage{
+  width: 100%;
+  height: 280px;
+  object-fit: cover;
+}
+
+.editItemImagePlaceholder{
+  color: rgba(255,255,255,.65);
+  font-weight: 800;
+}
+
+.editItemOwner{
+  color: rgba(255,255,255,.78);
+  font-weight: 800;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(0,0,0,.18);
+  border: 1px solid rgba(255,255,255,.08);
+}
+
+.editItemForm{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.editItemField{
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.editItemField.full{
+  grid-column: 1 / -1;
+}
+
+.editItemField span{
+  color: rgba(255,255,255,.72);
+  font-weight: 800;
+  font-size: 13px;
+}
+
+.editItemField input,
+.editItemField textarea{
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(0,0,0,.22);
+  color: rgba(255,255,255,.92);
+  border-radius: 12px;
+  padding: 12px;
+}
+
+.editItemField input{
+  height: 44px;
+}
+
+.editItemField textarea{
+  resize: vertical;
+  min-height: 160px;
+}
+
+.editItemActions{
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+
+.editItemBtn{
+  height: 44px;
+  padding: 0 14px;
+  border-radius: 12px;
+  font-weight: 900;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.editItemBtn.primary{
+  border: 1px solid rgba(45,212,255,.30);
+  background: rgba(45,212,255,.12);
+  color: rgba(255,255,255,.95);
+}
+
+.editItemBtn.danger{
+  border: 1px solid rgba(251,113,133,.30);
+  background: rgba(251,113,133,.12);
+  color: rgba(251,113,133,.95);
+}
+
+.editItemBtn.ghost{
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.06);
+  color: rgba(255,255,255,.92);
+}
+
+.editItemOk{
+  grid-column: 1 / -1;
+  color: rgba(34,197,94,.95);
+  font-weight: 900;
+}
+
+.editItemError{
+  grid-column: 1 / -1;
+  color: rgba(251,113,133,.95);
+  font-weight: 900;
+}
+
+@media (max-width: 860px){
+  .editItemCard{
+    grid-template-columns: 1fr;
+  }
+
+  .editItemForm{
+    grid-template-columns: 1fr;
+  }
+
+  .editItemField.full{
+    grid-column: auto;
+  }
+}

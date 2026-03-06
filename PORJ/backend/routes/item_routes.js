@@ -304,11 +304,11 @@ router.delete('/items/:itemId', isAuthenticated, async (req, res) => {
  *       500:
  *         description: Errore interno del server
  */
-router.post('/items/favorites', isAuthenticated, async (req, res) => {
+router.post('/items/favorites/:iteamId', isAuthenticated, async (req, res) => {
   try {
 
     const userId = req.session.user.id
-    const { itemId } = req.body
+    const itemId = req.params.iteamId
     const item = await getItemById(itemId)
     if (item === undefined) {
       res.statusCode = 401
@@ -384,10 +384,10 @@ router.delete('/items/favorites/:itemId', isAuthenticated, async (req, res) => {
  *       500:
  *         description: Errore interno del server
  */
-router.post('/items/cart', isAuthenticated, async (req, res) => {
+router.post('/items/cart/:iteamId', isAuthenticated, async (req, res) => {
   try {
     const userId = req.session.user.id
-    const { itemId } = req.body
+    const itemId = req.params.iteamId
     const item = await getItemById(itemId)
 
     if (item === undefined) {

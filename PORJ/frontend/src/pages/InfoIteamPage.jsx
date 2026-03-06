@@ -97,14 +97,89 @@ export async function loader({ params }) {
 
 import './InfoIteamPage.css';
 
-import React from 'react';
-import SearchBar from "../components/searchBar";
+import SearchBar from "../components/SearchBar";
 import { useNavigate, useLoaderData, Link } from 'react-router-dom';
 import PrewiewOwner from '../components/PrewiewOwner';
+import React, { useState } from 'react';
+
 
 export default function InfoIteamPage() {
   const navigate = useNavigate();
   const { item, tag, owner } = useLoaderData();
+  const [cartLoading, setCartLoading] = useState(false);
+  const [favLoading, setFavLoading] = useState(false);
+  const [actionMsg, setActionMsg] = useState('');
+  const [actionErr, setActionErr] = useState('');
+
+  const addToCart = async () => {
+  try {
+    setActionErr('');
+    setActionMsg('');
+    setCartLoading(true);
+
+    const res = await fetch(`http://localhost:3000/Items/items/cart/${item.id}`, {
+      method: 'POST',
+      credentials: 'include',
+    });
+
+    const txt = await res.text().catch(() => '');
+
+    if (res.status === 401) {
+      setActionErr('Devi effettuare il login per aggiungere al carrello.');
+      return;
+    }
+
+    if (!res.ok) {
+      let msg = txt;
+      try {
+        const j = JSON.parse(txt);
+        msg = j?.error ?? msg;
+      } catch {}
+      throw new Error(msg || `Errore (${res.status})`);
+    }
+
+    setActionMsg('Oggetto aggiunto al carrello.');
+  } catch (err) {
+    setActionErr(String(err?.message || err));
+  } finally {
+    setCartLoading(false);
+  }
+};
+
+const addToFavorites = async () => {
+  try {
+    setActionErr('');
+    setActionMsg('');
+    setFavLoading(true);
+
+    const res = await fetch(`http://localhost:3000/Items/items/favorites/${item.id}`, {
+      method: 'POST',
+      credentials: 'include',
+    });
+
+    const txt = await res.text().catch(() => '');
+
+    if (res.status === 401) {
+      setActionErr('Devi effettuare il login per aggiungere ai preferiti.');
+      return;
+    }
+
+    if (!res.ok) {
+      let msg = txt;
+      try {
+        const j = JSON.parse(txt);
+        msg = j?.error ?? msg;
+      } catch {}
+      throw new Error(msg || `Errore (${res.status})`);
+    }
+
+    setActionMsg('Oggetto aggiunto ai preferiti.');
+  } catch (err) {
+    setActionErr(String(err?.message || err));
+  } finally {
+    setFavLoading(false);
+  }
+};
 
   return (
     <div className="info-item-container">
@@ -118,14 +193,6 @@ export default function InfoIteamPage() {
             <div className="top-actions">
                 <button type="button" className="top-action-btn"><Link to={`/chat/${owner?.id}`}>Chat</Link>
                 
-                </button>
-
-                <button type="button" className="top-action-btn">
-                Preferiti
-                </button>
-
-                <button type="button" className="top-action-btn">
-                Carrello
                 </button>
 
                 <button
@@ -169,6 +236,36 @@ export default function InfoIteamPage() {
 
             <div className="descrizione">{item?.descrizione}</div>
           </div>
+          <div className="infoItemActions">
+            <button
+              type="button"
+              className="infoItemBtn"
+              onClick={addToCart}
+              disabled={cartLoading}
+            >
+              {cartLoading ? 'Aggiungo...' : 'Aggiungi al carrello'}
+            </button>
+
+            <button
+              type="button"
+              className="infoItemBtn secondary"
+              onClick={addToFavorites}
+              disabled={favLoading}
+            >
+              {favLoading ? 'Aggiungo...' : 'Aggiungi ai preferiti'}
+            </button>
+            <button
+              type="button"
+              className="infoItemBtn secondary"
+            >
+            <Link className="infoItemBtn secondary" to={`/item/edit/${item.id}`}>
+               Modifica / Elimina
+            </Link>
+          </button>
+          </div>
+
+          {actionMsg ? <div className="infoItemOk">{actionMsg}</div> : null}
+          {actionErr ? <div className="infoItemError">{actionErr}</div> : null}
         </div>
       </div>
     </div>

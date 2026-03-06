@@ -22,6 +22,7 @@ import CreateAuctionPage, { loader as createAuctionLoader } from './pages/Create
 import NotificationsPage, { loader as notificationsLoader } from './pages/NotificationsPage.jsx';
 import ChatsListPage, { loader as chatsListLoader } from './pages/ChatsListPage.jsx';
 import TagSearchPage, { loader as tagSearchLoader } from './pages/TagSearchPage.jsx';
+import EditItemPage, { loader as editItemLoader } from './pages/EditItemPage.jsx';
 
 const router = createBrowserRouter([{
   path: "/",
@@ -49,6 +50,7 @@ const router = createBrowserRouter([{
     { path: "/chats", element: <ChatsListPage />, loader: chatsListLoader },
     { path: "/tag", element: <TagSearchPage />, loader: tagSearchLoader },
     { path: "/tag/:tagName", element: <TagSearchPage />, loader: tagSearchLoader },
+    { path: "/item/edit/:itemId", element: <EditItemPage />, loader: editItemLoader },
     //{ path: "/infoIteam", element: <InfoIteam />, loader: iteamLoader },
     // { path: "addItem", element: <AddItemPage /> }
   ]

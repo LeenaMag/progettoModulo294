@@ -89,14 +89,16 @@ function ItemCard({ item }) {
 
 export default function TagSearchPage() {
   const navigate = useNavigate();
-  const { tags, selectedTag, items } = useLoaderData();
+  const { tags, selectedTag, selectedTagId, items } = useLoaderData();
+
+  
 
   const tagsNorm = useMemo(() => (Array.isArray(tags) ? tags.map(normalizeTag) : []), [tags]);
   const itemsArr = useMemo(() => (Array.isArray(items) ? items : []), [items]);
 
-  const onSelect = (tagName) => {
-    navigate(`/tag?tag=${encodeURIComponent(tagName)}`);
-  };
+  const onSelect = (tag) => {
+  navigate(`/tag?tagId=${encodeURIComponent(tag.id)}&tag=${encodeURIComponent(tag.name)}`);
+};
 
   // griglia a righe da 3
   const rows = [];
@@ -137,7 +139,7 @@ export default function TagSearchPage() {
                   key={t.id ?? t.name}
                   type="button"
                   className={`ts-chip ${active ? 'active' : ''}`}
-                  onClick={() => onSelect(t.name)}
+                  onClick={() => onSelect(t)}
                 >
                   {t.name}
                 </button>
@@ -164,35 +166,26 @@ export default function TagSearchPage() {
   );
 }
 
-export async function loader({ request, params }) {
+export async function loader({ request }) {
   const url = new URL(request.url);
-  const selectedTag = (params?.tagName ?? url.searchParams.get('tag') ?? '').trim();
 
-  // 1) carico tags
+  const selectedTagId = (url.searchParams.get('tagId') ?? '').trim();
+  const selectedTag = (url.searchParams.get('tag') ?? '').trim();
+
   const tagCandidates = [
-    'http://localhost:3000/Items/tags',
-    'http://localhost:3000/Items/items/tags',
-    'http://localhost:3000/tags',
+    'http://localhost:3000/search/tags',
   ];
 
   const { data: tagsData } = await fetchFirstOk(tagCandidates, { credentials: 'include' });
   const tagsRaw = Array.isArray(tagsData) ? tagsData : (tagsData?.tags ?? tagsData?.result ?? []);
   const tags = Array.isArray(tagsRaw) ? tagsRaw : [];
 
-  // 2) se non ho un tag selezionato, torno solo tags
-  if (!selectedTag) return { tags, selectedTag: '', items: [] };
-
-  // 3) cerco items per tag (più endpoint possibili)
-  const enc = encodeURIComponent(selectedTag);
+  if (!selectedTagId) {
+    return { tags, selectedTag: '', selectedTagId: '', items: [] };
+  }
 
   const itemCandidates = [
-    // per nome tag
-    `http://localhost:3000/Items/items/tag/${enc}`,
-    `http://localhost:3000/Items/items/tags/${enc}`,
-    `http://localhost:3000/Items/items/byTag/${enc}`,
-    `http://localhost:3000/Items/items/searchByTag/${enc}`,
-    // per id tag (se hai id)
-    // (se il backend vuole id, puoi usare i tag caricati e trovare l'id)
+    `http://localhost:3000/search/tag/${encodeURIComponent(selectedTagId)}/1`,
   ];
 
   let items = [];
@@ -204,5 +197,5 @@ export async function loader({ request, params }) {
     items = [];
   }
 
-  return { tags, selectedTag, items };
+  return { tags, selectedTag, selectedTagId, items };
 }

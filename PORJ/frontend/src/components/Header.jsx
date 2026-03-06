@@ -42,10 +42,10 @@ export default function Header() {
             </nav>
             <nav className="header-nav">
                 <ul className="nav-list">
-                    <li><Link to="/">preferiti</Link></li>
+                    <li><Link to="/preferiti">preferiti</Link></li>
                     <li><Link to="/catalogo">carrello</Link></li>
-                    <li><Link to="/aste">chat</Link></li>
-                    <li><Link to="/addItem">impostazioni</Link></li>
+                    <li><Link to="/chats">chat</Link></li>
+                    <li><Link to="/impostazioni">impostazioni</Link></li>
                 </ul>
             </nav>
             <li>
