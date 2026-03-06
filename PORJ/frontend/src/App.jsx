@@ -23,6 +23,7 @@ import NotificationsPage, { loader as notificationsLoader } from './pages/Notifi
 import ChatsListPage, { loader as chatsListLoader } from './pages/ChatsListPage.jsx';
 import TagSearchPage, { loader as tagSearchLoader } from './pages/TagSearchPage.jsx';
 import EditItemPage, { loader as editItemLoader } from './pages/EditItemPage.jsx';
+import NotFoundPage from './pages/NotFoundPage.jsx'
 
 const router = createBrowserRouter([{
   path: "/",
@@ -31,7 +32,7 @@ const router = createBrowserRouter([{
   hydrateFallbackElement: <div>Loading...</div>,
   children: [
     { index: true, element: <HomePage />, loader: itemsLoader },
-    { path: "/:ricerca", element: <HomePage />, loader: itemsLoader },
+    { path: "/ricerca/:ricerca", element: <HomePage />, loader: itemsLoader },
     { path: "/addItem", element: <AddItemPage />, loader: tagsloader },
     { path: "/login", element: <LoginPage /> },
     { path: "/Singup", element: <Singup /> },
@@ -51,6 +52,7 @@ const router = createBrowserRouter([{
     { path: "/tag", element: <TagSearchPage />, loader: tagSearchLoader },
     { path: "/tag/:tagName", element: <TagSearchPage />, loader: tagSearchLoader },
     { path: "/item/edit/:itemId", element: <EditItemPage />, loader: editItemLoader },
+    { path: "*", element: <NotFoundPage /> }
     //{ path: "/infoIteam", element: <InfoIteam />, loader: iteamLoader },
     // { path: "addItem", element: <AddItemPage /> }
   ]

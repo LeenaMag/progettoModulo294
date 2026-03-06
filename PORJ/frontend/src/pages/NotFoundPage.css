@@ -1,0 +1,47 @@
+.notFoundContainer {
+  min-height: calc(100vh - var(--header-h) - 120px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px;
+}
+
+.notFoundBox {
+  width: min(500px, 95vw);
+  background: rgba(18, 27, 46, 0.75);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 32px 24px;
+  text-align: center;
+}
+
+.notFoundBox h1 {
+  font-size: 4rem;
+  margin: 0;
+  color: var(--primary);
+}
+
+.notFoundBox h2 {
+  margin: 10px 0;
+  color: rgba(255,255,255,.92);
+}
+
+.notFoundBox p {
+  margin-bottom: 22px;
+  color: rgba(255,255,255,.72);
+}
+
+.notFoundHomeLink {
+  display: inline-block;
+  padding: 12px 20px;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 700;
+  color: #0b1220;
+  background: linear-gradient(135deg, rgba(45,212,255,.95), rgba(96,165,250,.95));
+}
+
+.notFoundHomeLink:hover {
+  transform: translateY(-1px);
+}

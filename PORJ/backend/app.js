@@ -105,3 +105,9 @@ app.use(
     swaggerUi.serve,
     swaggerUi.setup(spaces))
 
+app.use((req, res) => {
+    res.status(404).json({
+        error: 'La pagina richiesta non esiste',
+        home: 'http://localhost:5173/'
+    })
+})
